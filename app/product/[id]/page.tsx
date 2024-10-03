@@ -49,7 +49,7 @@ export default function ProductPage({ params: { id } }: { params: { id: string }
                 </ul>
             </nav>
 
-            <div className="flex flex-col md:flex-row pb-[160px]">
+            <div className="flex flex-col md:flex-row">
                 <div className="flex-1">
                     <ProductCarousel carouselItems={items} />
                 </div>
@@ -62,8 +62,8 @@ export default function ProductPage({ params: { id } }: { params: { id: string }
                         </p>
 
                         <div className="flex items-center gap-2 pt-5">
-                            <span className="text-green-600 font-semibold">В наличии</span>
-                            <span className="text-gray-500">— Гарантия возврата в течение 30 дней</span>
+                            <span className="text-green-600 font-semibold">В наличии ... шт.</span>
+                            <span className="text-gray-500">— Гарантия возврата в течение 14 дней</span>
                         </div>
                     </div>
 
@@ -109,7 +109,7 @@ export default function ProductPage({ params: { id } }: { params: { id: string }
                     
                     <div className="flex gap-10 items-center pt-5">
                         <div className="flex items-center gap-2">
-                            <Shield size={24} />
+                            <Shield size={24} />    
                             <p>Гарантия:</p>
                         </div>
                         <div className="flex gap-2">
@@ -127,7 +127,7 @@ export default function ProductPage({ params: { id } }: { params: { id: string }
                         </div>
                     </div>
                     
-                    <div className="flex justify-between items-center pt-5">
+                    <div className="flexs items-center pt-5 flex-col">
                         <div className="flex items-center gap-5 text-[20px]">
                             <Star size={24} />
                             <p>Рейтинг:</p>
@@ -138,7 +138,7 @@ export default function ProductPage({ params: { id } }: { params: { id: string }
                             </span>
                         </div>
 
-                        <div className="flex items-center gap-5">
+                        <div className="flex items-center gap-5 mt-3">
                             <Button className="rounded-[10px]"><ShoppingBasket size={24}/></Button>
                             <Button className="rounded-[10px]"><Heart size={24}/></Button>
                             <Button className="rounded-[10px]">Купить</Button>
@@ -149,8 +149,8 @@ export default function ProductPage({ params: { id } }: { params: { id: string }
             
             
 
-            <div className="pt-10 flex items-center">
-                <div className="pt-10 max-w-[800px] mx-auto w-1/2">
+            <div className="pt-10 max-w-900">
+                <div className="pt-10 mx-auto">
                     <h3 className="text-2xl font-semibold mb-4 text-gray-800">Описание:</h3>
                     <p className="text-gray-700 leading-relaxed bg-gray-200 p-4 border border-gray-200 rounded-md shadow-sm">
                         iPhone 16 Pro Max создан вместе с Apple Intelligence, персональной интеллектуальной системой, которая помогает вам писать, выражать себя и выполнять задачи без усилий. Благодаря новаторской защите конфиденциальности вы можете быть уверены, что никто другой не сможет получить доступ к вашим данным — даже Apple. 
@@ -161,7 +161,7 @@ export default function ProductPage({ params: { id } }: { params: { id: string }
                     </p>
                 </div>
                 
-                <div className=" w-1/2">
+                <div className="pt-10">
                     <h3 className="text-lg font-semibold mb-3">Характеристики:</h3>
                     <div className="space-y-2">
                         <div className="flex justify-between p-3 bg-gray-200 border rounded-md shadow-sm w-full">
