@@ -1,7 +1,12 @@
 'use client'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { ProductCard, Title } from './index';
 import { cn } from '@/lib/utils';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
 
 interface Props {
     title: string
@@ -11,7 +16,7 @@ interface Props {
     className?: string;
 }
 
-export const ProductsGroupList:React.FC<Props> = ({
+export const ProductsGroupList: React.FC<Props> = ({
     title,
     items,
     categoryId,
@@ -23,19 +28,24 @@ export const ProductsGroupList:React.FC<Props> = ({
         <div className={className} id={title}>
             <Title text={title} size='lg' className='font-extrabold mb-5'/>
 
-            <div className={cn('grid grid-cols-3 gap-[50px]', listClassName)}>
+            <Swiper
+                slidesPerView={4}
+                loop={true}
+                className={cn(listClassName)}
+            >
                 {
                     items.map((product, i) => (
-                        <ProductCard 
-                            key={product.id}
-                            id={product.id}
-                            name={product.name}
-                            imageUrl={product.imageUrl}
-                            price={product.items[0].price}
-                        />
+                        <SwiperSlide key={product.id}>
+                            <ProductCard 
+                                id={product.id}
+                                name={product.name}
+                                imageUrl={product.imageUrl}
+                                price={product.items[0].price}
+                            />
+                        </SwiperSlide>
                     ))
                 }
-            </div>
+            </Swiper>
         </div>
     );
 }

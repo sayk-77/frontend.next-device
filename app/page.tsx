@@ -24,10 +24,10 @@ export default function Home() {
       <TopBar />
 
       <Container className="pb-14 mt-10">
-        <div className="flex gap-[80px]">
+        <div className="flex flex-col gap-[40px]">
           <div className="flex-1">
-            <div className="flex flex-col gap-[10px]">
-              <ProductsGroupList
+            <div className="flex flex-col gap-[30px]">
+            <ProductsGroupList
                 title="Мобильные телефоны"
                 items={[
                   {

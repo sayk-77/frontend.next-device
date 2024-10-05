@@ -8,7 +8,7 @@ interface Props {
 }
 
 const cats = [
-  { id: 11, name: 'Все', path: '/catalog/'},
+  { id: 11, name: 'Все', path: '/catalog'},
   { id: 2, name: 'Мобильные телефоны' , path: '/catalog/mobile-phone'},
   { id: 3, name: 'Ноутбуки', path: '/catalog/laptop' },
   { id: 4, name: 'Планшенты', path: '/catalog/tablet' },
@@ -23,9 +23,8 @@ export const Categories:React.FC<Props> = ({className}) => {
     <div className={cn("inline-flex gap-1 bg-gray-50 p-1 rounded-2xl", className)}>
         {
             cats.map(({id, name, path}) => (
-                <Link href={`/#${path}`} key={id} className={cn('flex items-center font-bold h-11 rounded-2xl px-5'
-                )}>
-                    {name}
+                <Link href={`${path}`} key={id} className={cn('flex items-center font-bold h-11 rounded-2xl px-5')}>
+                  {name}
                 </Link>
             ))
         }

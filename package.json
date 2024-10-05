@@ -40,6 +40,7 @@
     "react-dom": "^18",
     "react-slick": "^0.30.2",
     "react-use": "^17.5.1",
+    "swiper": "^11.1.14",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "ts-node": "^10.9.2",
