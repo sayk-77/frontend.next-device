@@ -22,7 +22,7 @@ export const ProductCard: React.FC<Props> = ({ className, imageUrl, name, price,
             </Link>
             
             <div className="flex flex-col items-center justify-between text-center gap-2 p-2">
-                <Title text={name} className="font-bold text-[14px]" />
+                <Title text={name} className="font-bold text-[13px]" />
                 <p className='text-[11px] text-gray-400'>
                     ядер - 8x(2 ГГц), 2 ГБ, 2 SIM, IPS, 1600x720, камера 13 Мп, 4G, GPS, FM, 5000 мА*ч
                 </p>
