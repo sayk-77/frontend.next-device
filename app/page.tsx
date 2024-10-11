@@ -23,9 +23,11 @@ const banners: BannerItem[] = [
   { id: 3, title: `Iqoo Z9 Turbo - "Iqoo Z9 Turbo — мощный производитель с революционной камерой для тех, кто ценит скорость и качество!"`, imagePath: "/iqoo-z9.jpg" },
 ];
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL
+
 const fetchProducts = async (categoryUrl: string, limit: number = 4): Promise<Product[]> => {
   try {
-    const response = await axios.get(`http://localhost:5000/api/catalog/${categoryUrl}`, {
+    const response = await axios.get(`${API_URL}/catalog/${categoryUrl}`, {
       params: { limit }
     });
     return response.data;
@@ -42,8 +44,8 @@ export default function Home() {
   useEffect(() => {
     const loadProducts = async () => {
       const groups = [
-        { title: "Мобильные телефоны", categoryUrl: "category/mobile" },
-        { title: "Ноутбуки", categoryUrl: "category/laptop" },
+        { title: "Мобильные телефоны", categoryUrl: "mobile" },
+        { title: "Ноутбуки", categoryUrl: "laptop" },
         { title: "Успей купить", categoryUrl: "discounts" },
         { title: "Новинки", categoryUrl: "new" },
       ];
@@ -80,7 +82,7 @@ export default function Home() {
                   title={group.title}
                   loading={loading}
                   products={group.products}
-                  categoryUrl={`/category/${group.categoryUrl}`}
+                  categoryUrl={`/catalog/${group.categoryUrl}`}
                 />
               ))}
             </div>
