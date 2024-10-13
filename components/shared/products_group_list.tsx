@@ -47,13 +47,14 @@ export const ProductsGroupList: React.FC<Props> = ({ products, className, title,
                             name={product.name}
                             imageUrl={product.image}
                             price={product.price}
+                            description={product.description}
                         />
                     </SwiperSlide>
                     
                 ))}
             </Swiper>
             <div className='flex justify-center pt-[20px]'>
-                <Button>
+                <Button variant="outline" className='hover:border-transparent hover:text-white hover:bg-orange-500 transition-all duration-300'>
                     <Link href={categoryUrl}>Показать еще</Link>
                 </Button>
             </div>

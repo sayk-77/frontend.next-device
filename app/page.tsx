@@ -25,11 +25,9 @@ const banners: BannerItem[] = [
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
-const fetchProducts = async (categoryUrl: string, limit: number = 4): Promise<Product[]> => {
+const fetchProducts = async (categoryUrl: string): Promise<Product[]> => {
   try {
-    const response = await axios.get(`${API_URL}/catalog/${categoryUrl}`, {
-      params: { limit }
-    });
+    const response = await axios.get(`${API_URL}/catalog/${categoryUrl}`);
     return response.data;
   } catch (err) {
     console.error(err);
@@ -52,7 +50,7 @@ export default function Home() {
 
       const fetchedProducts = await Promise.all(
         groups.map(async (group) => {
-          const products = await fetchProducts(group.categoryUrl, 4);
+          const products = await fetchProducts(group.categoryUrl);
           return { ...group, products };
         })
       );

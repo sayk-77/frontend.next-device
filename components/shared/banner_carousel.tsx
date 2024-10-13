@@ -1,4 +1,5 @@
 'use client'
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface CarouselItem {
@@ -31,9 +32,11 @@ export const AutoScrollCarousel: React.FC<AutoScrollCarouselProps> = ({ carousel
             index === currentIndex ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <img
+          <Image
             src={item.imagePath}
             alt={item.title}
+            width={1200}
+            height={600}
             className="w-full h-full object-cover"  
           />
           <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">

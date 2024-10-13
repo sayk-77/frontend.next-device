@@ -62,7 +62,7 @@ export default function CatalogPage() {
             <Link href="/makers" className="text-[28px]">Брeнды</Link>
             <div className="flex flex-wrap gap-5 justify-between">
               {brands.map(item => (
-                <Link href={`/makers/${item.name}`} key={item.id}>
+                <Link href={`/brands/${item.name}`} key={item.id}>
                   <Card
                     imageUrl={`${API_URL}/images/brand/${item.imageUrl}`}
                     name={item.name}

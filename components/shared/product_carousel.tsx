@@ -7,12 +7,13 @@ import { Card, CardContent } from "@/components/ui/card"
 interface CarouselItem {
     id: number
     imageUrl: string
-    title: string
 }
   
 interface ProductCarouselProps {
     carouselItems: CarouselItem[];
 }
+
+const API_URL_IMAGE_PRODUCT = process.env.NEXT_PUBLIC_API_URL_IMAGE_PRODUCT
 
 export const ProductCarousel: React.FC<ProductCarouselProps> = ({ carouselItems }) => {
   const [mainCarouselRef, mainEmblaApi] = useEmblaCarousel()
@@ -43,8 +44,8 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ carouselItems 
     mainEmblaApi.on("select", onSelect)
   }, [mainEmblaApi, onSelect])
 
-  if (carouselItems.length === 0) {
-    return <div>Нет доступных товаров</div>
+  if (!carouselItems || carouselItems.length === 0) {
+    return 
   }
 
   return (
@@ -57,8 +58,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ carouselItems 
                 <div key={item.id} className="flex-[0_0_100%] min-w-0">
                   <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px]">
                     <img
-                      src={item.imageUrl}
-                      alt={item.title}
+                      src={`${API_URL_IMAGE_PRODUCT}${item.imageUrl}`}
                       loading="lazy"
                       className="w-full h-full object-scale-down rounded-xl"
                     />
@@ -73,13 +73,12 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ carouselItems 
             {carouselItems.map((item, index) => (
               <button
                 key={item.id}
-                aria-label={`Просмотреть ${item.title}`}
+                aria-label={`Просмотреть ${item.imageUrl}`}
                 className={`flex-[0_0_20%] min-w-0 p-1 cursor-pointer transition-opacity ${index === selectedIndex ? "opacity-100" : "opacity-50"}`}
                 onClick={() => onThumbClick(index)}
               >
                 <img
-                  src={item.imageUrl}
-                  alt={`Миниатюра ${item.title}`}
+                  src={`${API_URL_IMAGE_PRODUCT}${item.imageUrl}`}
                   loading="lazy"
                   className="w-full h-[80px] sm:h-[100px] object-scale-down rounded"
                 />
