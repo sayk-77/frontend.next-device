@@ -33,11 +33,18 @@ export const ProductsGroupList: React.FC<Props> = ({ products, className, title,
     
     return (
         <div className={className}>
-            <Title text={title} size='lg' className='font-extrabold mb-5' /> 
+            <div className='flex items-center justify-between'>
+                <Title text={title} size='lg' className='font-extrabold' />
+                <div className='flex justify-center pr-[30px]'>
+                    <Button variant="link" className=''>
+                        <Link href={categoryUrl}>Показать еще</Link>
+                    </Button>
+                </div>
+            </div>
 
             <Swiper
                 slidesPerView={4}
-                loop={true}
+                loop={false}
                 className={cn('my-swiper')}
             >
                 {products.map((product) => (
@@ -53,11 +60,6 @@ export const ProductsGroupList: React.FC<Props> = ({ products, className, title,
                     
                 ))}
             </Swiper>
-            <div className='flex justify-center pt-[20px]'>
-                <Button variant="outline" className='hover:border-transparent hover:text-white hover:bg-orange-500 transition-all duration-300'>
-                    <Link href={categoryUrl}>Показать еще</Link>
-                </Button>
-            </div>
         </div>
     );
 };

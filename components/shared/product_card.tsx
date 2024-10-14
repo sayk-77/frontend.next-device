@@ -9,23 +9,29 @@ interface Props {
     id: number;
     imageUrl: string;
     name: string;
-    description: string
+    description: string;
     price: number;
     className?: string;
 }
 
-const API_URL_IMAGE_PRODUCT = process.env.NEXT_PUBLIC_API_URL_IMAGE_PRODUCT
+const API_URL_IMAGE_PRODUCT = process.env.NEXT_PUBLIC_API_URL_IMAGE_PRODUCT;
 
 export const ProductCard: React.FC<Props> = ({ className, imageUrl, name, price, id, description }) => {
     return (
-        <div className={`${className} flex flex-col border min-w-[280px] max-w-[280px] w-full justify-between p-3 rounded-lg overflow-hidden`}>
+        <div className={`${className} flex flex-col border min-w-[280px] max-w-[280px] w-full h-[450px] justify-between p-3 rounded-lg overflow-hidden`}>
             <Link href={`/product/${id}`}>
-                <div className="flex flex-col items-center p-3">
-                    <Image width={150} height={150} className="object-scale-down mb-3" src={`${API_URL_IMAGE_PRODUCT}${imageUrl}`} alt={name} />
+                <div className="relative flex justify-center items-center h-[200px] mb-3">
+                    <Image 
+                        width={200} 
+                        height={200} 
+                        className="object-contain" 
+                        src={`${API_URL_IMAGE_PRODUCT}${imageUrl}`} 
+                        alt={name} 
+                    />
                 </div>
             </Link>
             
-            <div className="flex flex-col items-center justify-between text-center gap-2 p-2">
+            <div className="flex flex-col items-center justify-between text-center gap-2 ">
                 <Title text={name} className="font-bold text-sm" />
                 <p className='text-[11px] text-gray-400'>
                     {description}
