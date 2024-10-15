@@ -1,6 +1,7 @@
 'use client'
 
 import { Container, ProductCarousel, Title } from "@/components/shared";
+import Breadcrumbs from "@/components/shared/breadCrumb";
 import { Button, ToggleGroup, ToggleGroupItem } from "@/components/ui";
 import axios from "axios";
 import { Database, Palette, Star, ShoppingBasket, Heart, Shield } from "lucide-react";
@@ -10,39 +11,33 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 const rating = [1,2,3,4,5]
 
-export default function ProductPage({ params: { id } }: { params: { id: string } }) {
+export default function ProductPage({ params: { searchName } }: { params: { searchName: string } }) {
     const [product, setProduct] = useState<Product>({} as Product)
     
     useEffect(() => {
-        const getProductById  = async (id: string) => {
+        const getProductById  = async (searchName: string) => {
             try {
-                const response = await axios.get(`${API_URL}/products/${id}`)
+                const response = await axios.get(`${API_URL}/products/${searchName}`)
                 setProduct(response.data)
+                console.log(response.data)
             } catch (err) {
                 console.log(err);
             }
         }
-        getProductById(id)
-    }, [id])
+        getProductById(searchName)
+    }, [searchName])
+    
+    const customBreadCrumbs = [
+        { label: product.brand?.name, href: `/brands/${product.brand?.name}` },
+        { label: product.category?.title || 'Категория', href: `/brands/${product.brand?.name}/category/${product.category?.title}` },
+        { label: product.name, href: `/product/${product.searchName}` },
+    ];
 
     return (
         <div className="p-6">
             <Container>
-                <nav className="mb-4">
-                    <ul className="flex space-x-2 text-gray-500">
-                        <li><a href="#" className="hover:text-blue-600">Каталог</a></li>
-                        <li><span>/</span></li>
-                        <li><a href="#" className="hover:text-blue-600">Смартфоны и фототехника</a></li>
-                        <li><span>/</span></li>
-                        <li><a href="#" className="hover:text-blue-600">Смартфоны и гаджеты</a></li>
-                        <li><span>/</span></li>
-                        <li><a href="#" className="hover:text-blue-600">Смартфоны</a></li>
-                        <li><span>/</span></li>
-                        <li className="font-semibold">6.9" Смартфон Apple iPhone 16 Pro Max 512 ГБ бежевый</li>
-                    </ul>
-                </nav>
-    
-                <div className="flex flex-col md:flex-row">
+            <Breadcrumbs customBreadcrumbs={customBreadCrumbs}/>
+                <div className="flex flex-col md:flex-row pt-[30px]">
                     <div className="flex-1">
                         <ProductCarousel carouselItems={product.images} />
                     </div>

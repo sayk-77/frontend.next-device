@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, ProductCard, Title } from './index';
 import { cn } from '@/lib/utils';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -14,6 +14,7 @@ interface Product {
     id: number;
     name: string;
     description: string;
+    searchName: string
     image: string;
     price: number;
 }
@@ -34,7 +35,7 @@ export const ProductsGroupList: React.FC<Props> = ({ products, className, title,
     return (
         <div className={className}>
             <div className='flex items-center justify-between'>
-                <Title text={title} size='lg' className='font-extrabold' />
+                <Title text={title} className='text-[26px] pb-[10px]' />
                 <div className='flex justify-center pr-[30px]'>
                     <Button variant="link" className=''>
                         <Link href={categoryUrl}>Показать еще</Link>
@@ -54,6 +55,7 @@ export const ProductsGroupList: React.FC<Props> = ({ products, className, title,
                             name={product.name}
                             imageUrl={product.image}
                             price={product.price}
+                            searchName={product.searchName}
                             description={product.description}
                         />
                     </SwiperSlide>

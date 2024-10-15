@@ -4,7 +4,9 @@ import { Card } from "@/components/shared";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import useBrandStore from "@/store/storeBrand"
+import useBrandStore from "@/store/storeBrand";
+import useBreadCrumbStore from "@/store/breadCrumbStore";
+import { Button } from "@/components/ui";
 
 interface Brand {
   id: number;
@@ -15,6 +17,7 @@ interface Brand {
 interface Product {
   id: number;
   name: string;
+  searchName: string;
   description: string;
   image: string;
   price: number;
@@ -41,8 +44,12 @@ export default function CatalogPage() {
   
   const setBrandId = useBrandStore(state => state.setBrandId);
   const setBrandName = useBrandStore(state => state.setBrandName);
+  const loadBreadCrumbs = useBreadCrumbStore(state => state.loadBreadCrumbs);
+  const setBreadCrumbs = useBreadCrumbStore(state => state.setBreadCrumbs);
 
   useEffect(() => {
+    loadBreadCrumbs();
+
     const fetchData = async () => {
       const fetchedBrands = await getItems('brands', 5);
       const fetchedDiscounts = await getItems('catalog/discounts');
@@ -51,54 +58,62 @@ export default function CatalogPage() {
       setBrands(fetchedBrands);
       setProductDiscounts(fetchedDiscounts);
       setProductNew(fetchedNewProducts);
+      
+      setBreadCrumbs([
+        { label: 'Каталог', link: '/catalog' },
+        { label: 'Бренды', link: '/brands' }
+      ]);
     };
 
     fetchData();
   }, []);
 
   const handleBrandClick = (id: number, name: string) => {
-    setBrandId(id)
-    setBrandName(name)
+    setBrandId(id);
+    setBrandName(name);
+    
+    useBreadCrumbStore.getState().addBreadCrumb({ label: name, link: `/brands/${name}` });
   };
 
   return (
-    <>
-      <Container className="p-5 flex flex-col gap-5">
-        <Title text="Каталог" className="text-[32px] font-bold" />
-
-        <div className="flex flex-col gap-[50px]">
-          <div className="flex flex-col gap-5">
-            <Link href="/makers" className="text-[28px]">Брeнды</Link>
-            <div className="flex flex-wrap gap-5 justify-between">
-              {brands.map(item => (
-                <Link href={`/brands/${item.name}`} key={item.id} onClick={() => handleBrandClick(item.id, item.name)}>
-                  <Card
-                    imageUrl={`${API_URL}/images/brand/${item.imageUrl}`}
-                    name={item.name}
-                  />
-                </Link>
-              ))}
-            </div>
+    <Container className="p-5 flex flex-col gap-5">
+      <div className="flex flex-col gap-[50px]">
+        <div className="flex flex-col gap-5">
+          <div className="flex items-center justify-between">
+            <Title text="Бренды" className="text-[26px]"/>
+            <Button variant="link">
+              <Link href="/catalog/new" className="text-[14px] pr-[30px]">Показать все</Link>
+            </Button>
           </div>
-
-          <div>
-            <Link href="/catalog/devices" className="text-[28px]">Устройства</Link>
-            <CatalogDevices />
+          <div className="flex flex-wrap gap-5 justify-between">
+            {brands.map(item => (
+              <Link href={`/brands/${item.name}`} key={item.id} onClick={() => handleBrandClick(item.id, item.name)}>
+                <Card
+                  imageUrl={`${API_URL}/images/brand/${item.imageUrl}`}
+                  name={item.name}
+                />
+              </Link>
+            ))}
           </div>
-
-          <ProductsGroupList
-            title="Успей купить"
-            products={productsDiscounts}
-            categoryUrl="catalog/discounts"
-          />
-
-          <ProductsGroupList
-            title="Новинки"
-            products={productNew}
-            categoryUrl="catalog/new"
-          />
         </div>
-      </Container>
-    </>
+
+        <div>
+          <Title text="Категории" className="text-[26px]"/>
+          <CatalogDevices />
+        </div>
+
+        <ProductsGroupList
+          title="Успей купить"
+          products={productsDiscounts}
+          categoryUrl="catalog/discounts"
+        />
+
+        <ProductsGroupList
+          title="Новинки"
+          products={productNew}
+          categoryUrl="catalog/new"
+        />
+      </div>
+    </Container>
   );
 }

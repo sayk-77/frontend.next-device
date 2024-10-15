@@ -20,10 +20,12 @@ export const Header: React.FC<Props> = ({className}) => {
                 </div>
             </Link>
             
-            <Button variant="outline" className='ml-5'>
-                <Link href="/catalog">Каталог</Link>
-            </Button>
-
+            <Link href="/catalog">
+                <Button variant="outline" className='ml-5'>
+                    Каталог    
+                </Button>
+            </Link>
+            
             <div className='mx-10 flex-1'>
                 <SearchInput />
             </div>

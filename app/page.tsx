@@ -2,6 +2,7 @@
 import { Container, TopBar, ProductsGroupList, AutoScrollCarousel } from "@/components/shared";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import useBreadCrumbStore from "@/store/breadCrumbStore";
 
 interface BannerItem {
   id: number;
@@ -13,6 +14,7 @@ interface Product {
   id: number;
   name: string;
   description: string;
+  searchName: string
   image: string;
   price: number;
 }

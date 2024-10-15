@@ -9,6 +9,7 @@ interface Props {
     id: number;
     imageUrl: string;
     name: string;
+    searchName: string
     description: string;
     price: number;
     className?: string;
@@ -16,17 +17,17 @@ interface Props {
 
 const API_URL_IMAGE_PRODUCT = process.env.NEXT_PUBLIC_API_URL_IMAGE_PRODUCT;
 
-export const ProductCard: React.FC<Props> = ({ className, imageUrl, name, price, id, description }) => {
+export const ProductCard: React.FC<Props> = ({ className, imageUrl, name, searchName, price, id, description }) => {
     return (
         <div className={`${className} flex flex-col border min-w-[280px] max-w-[280px] w-full h-[450px] justify-between p-3 rounded-lg overflow-hidden`}>
-            <Link href={`/product/${id}`}>
-                <div className="relative flex justify-center items-center h-[200px] mb-3">
+            <Link href={`/product/${searchName}`}>
+                <div className="relative flex justify-center items-center h-[200px] mb-3 mt-3">
                     <Image 
-                        width={200} 
+                        width={200}
                         height={200} 
                         className="object-contain" 
                         src={`${API_URL_IMAGE_PRODUCT}${imageUrl}`} 
-                        alt={name} 
+                        alt={searchName}
                     />
                 </div>
             </Link>

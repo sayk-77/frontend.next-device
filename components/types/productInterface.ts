@@ -2,6 +2,7 @@ interface Product {
     id: number;
     sku: string;
     name: string;
+    searchName: string
     description: string;
     price: number;
     discountPrice: number;
@@ -13,6 +14,7 @@ interface Product {
     category: {
       id: number;
       name: string;
+      title: string
       parentCategoryId: number | null;
       subCategories: any[] | null; 
     };

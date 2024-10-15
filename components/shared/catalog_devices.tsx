@@ -1,54 +1,52 @@
-import { Card, Container } from "@/components/shared"
-import Link from "next/link"
+'use client'
 
-const catalogDevices = [
-    {
-        id: 1,
-        title: "Смартфоны",
-        category: "mobile",
-        imageUrl: "/mobile.webp"
-    },
-    {
-        id: 2,
-        title: "Компьютеры",
-        category: "pc",
-        imageUrl: "/pc.avif"
-    },
-    {
-        id: 3,
-        title: "Ноутбуки",
-        category: "laptop",
-        imageUrl: "/laptop.png"
-    },
-    {
-        id: 4,
-        title: "Умные часы",
-        category: "smart-watch",
-        imageUrl: "/smart_watch.jpg"
-    },
-    {
-        id: 5,
-        title: "Планшеты",
-        category: "tablet",
-        imageUrl: "/tablet.jpg"
-    },
-    {
-        id: 6,
-        title: "Аксесуары",
-        category: "accessories",
-        imageUrl: "/accessories.jpg"
+import { CategoryCard} from "@/components/shared"
+import axios from "axios"
+import Link from "next/link"
+import { useEffect, useState } from "react"
+
+interface Categories {
+    category: {
+        id: number
+        name: string
+        title: string
+        categoryImage: string
     }
-]
+    count: string
+}
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export const CatalogDevices = () => {
+    const [category, setCategory] = useState<Categories[]>([])
+    
+    useEffect(() => {
+        const getCategory = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/categories/count`)
+                setCategory(response.data)
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        getCategory()
+    }, [])
+    
     return (
         <div className="flex flex-wrap gap-5 justify-between">
-            {catalogDevices.map(device => (
-                <Link href={`/catalog/${device.category}`} key={device.id}>
-                    <Card 
-                        name={device.title}
-                        imageUrl={device.imageUrl}
-                    />
+            {category.map(category => (
+                <Link
+                    href={`/catalog/${category.category.title}`}
+                    key={category.category.id}
+                    className="hover:text-orange-500"
+                >
+                        <CategoryCard
+                            id={category.category.id}
+                            name={category.category.name}
+                            title={category.category.title}
+                            count={category.count}
+                            imageUrl={`${API_URL}/images/category/${category.category.categoryImage}`}
+                        />
                 </Link>
             ))}
         </div>

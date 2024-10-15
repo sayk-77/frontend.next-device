@@ -1,5 +1,6 @@
 'use client'
 import { AutoScrollCarousel, CategoryCard, Container, ProductsGroupList, Title } from "@/components/shared";
+import Breadcrumbs from "@/components/shared/breadCrumb";
 import useBrandStore from "@/store/storeBrand";
 import axios from "axios";
 import Image from "next/image";
@@ -14,7 +15,7 @@ interface Category {
 interface BrandCategory {
     category: Category
     count: number
-    image_category: string
+    images_category: string
 }
 
 interface BrandBanner {
@@ -33,6 +34,7 @@ interface BrandInfo {
 interface Product {
     id: number
     name: string
+    searchName: string
     description: string
     price: number
     image: string
@@ -52,6 +54,7 @@ export default function PageBrand() {
             try {
                 const response = await axios.get(`${API_URL}/brands/${brandId}/category`)
                 setBrandCategory(response.data.categories)
+                console.log(response.data.categories)
             } catch (err) {
                 console.log(err)
             }
@@ -82,13 +85,17 @@ export default function PageBrand() {
 
     return (
         <Container>
-            <Image 
-                src={`${API_URL}/images/brand/${brandInfo.imageUrl}`}
-                className="m-auto pt-[10px]"
-                width={300}
-                height={300}
-                alt={`${brandInfo.name} logo`}
-            />
+            <Breadcrumbs className="pt-[10px]"/>
+            <div className="flex flex-col items-center">
+                <Image 
+                    src={`${API_URL}/images/brand/${brandInfo.imageUrl}`}
+                    className="m-auto pt-[10px]"
+                    width={300}
+                    height={300}
+                    alt={`${brandInfo.name} logo`}
+                />
+                <Title text={brandName} className="text-[32px] font-extrabold"/>
+            </div>
             {
                 brandInfo.banners && brandInfo.banners.length > 0 && <AutoScrollCarousel carouselItems={brandInfo.banners}/>
             }
@@ -103,7 +110,7 @@ export default function PageBrand() {
                             name={item.category.name}
                             count={item.count.toString()}
                             title={item.category.title}
-                            imageUrl={`${API_URL}/images/product/${item.image_category}`}
+                            imageUrl={`${API_URL}/images/product/${item.images_category}`}
                         />
                     </div>
                 ))}
