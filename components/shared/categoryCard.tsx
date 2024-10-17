@@ -12,9 +12,10 @@ interface CategoryCardProps {
     count: string
     title: string
     imageUrl: string
+    link: string;
 }
 
-export const CategoryCard: React.FC<CategoryCardProps> = ({id, name, count, imageUrl, title }) => {
+export const CategoryCard: React.FC<CategoryCardProps> = ({id, name, count, imageUrl, title, link }) => {
     const {brandId, brandName} = useBrandStore()
     
     useEffect(() => {
@@ -22,7 +23,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({id, name, count, imag
     }, [])
     
     return (
-        <Link href={`/brands/${brandName}/category/${title}`}>
+        <Link href={link}>
             <div className="flex flex-col items-center p-4 bg-white border rounded-lg shadow-md w-52 h-52 hover:text-orange-500">
                     <div className="relative w-full h-32 mb-2">
                         <Image

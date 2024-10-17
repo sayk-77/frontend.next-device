@@ -5,7 +5,6 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import useBrandStore from "@/store/storeBrand";
-import useBreadCrumbStore from "@/store/breadCrumbStore";
 import { Button } from "@/components/ui";
 
 interface Brand {
@@ -44,11 +43,8 @@ export default function CatalogPage() {
   
   const setBrandId = useBrandStore(state => state.setBrandId);
   const setBrandName = useBrandStore(state => state.setBrandName);
-  const loadBreadCrumbs = useBreadCrumbStore(state => state.loadBreadCrumbs);
-  const setBreadCrumbs = useBreadCrumbStore(state => state.setBreadCrumbs);
 
   useEffect(() => {
-    loadBreadCrumbs();
 
     const fetchData = async () => {
       const fetchedBrands = await getItems('brands', 5);
@@ -59,10 +55,6 @@ export default function CatalogPage() {
       setProductDiscounts(fetchedDiscounts);
       setProductNew(fetchedNewProducts);
       
-      setBreadCrumbs([
-        { label: 'Каталог', link: '/catalog' },
-        { label: 'Бренды', link: '/brands' }
-      ]);
     };
 
     fetchData();
@@ -71,8 +63,6 @@ export default function CatalogPage() {
   const handleBrandClick = (id: number, name: string) => {
     setBrandId(id);
     setBrandName(name);
-    
-    useBreadCrumbStore.getState().addBreadCrumb({ label: name, link: `/brands/${name}` });
   };
 
   return (
@@ -82,7 +72,7 @@ export default function CatalogPage() {
           <div className="flex items-center justify-between">
             <Title text="Бренды" className="text-[26px]"/>
             <Button variant="link">
-              <Link href="/catalog/new" className="text-[14px] pr-[30px]">Показать все</Link>
+              <Link href="/brands" className="text-[14px] pr-[30px]">Показать все</Link>
             </Button>
           </div>
           <div className="flex flex-wrap gap-5 justify-between">
@@ -98,7 +88,7 @@ export default function CatalogPage() {
         </div>
 
         <div>
-          <Title text="Категории" className="text-[26px]"/>
+          <Title text="Категории" className="text-[26px] pb-[20px]"/>
           <CatalogDevices />
         </div>
 

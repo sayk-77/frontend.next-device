@@ -1,4 +1,3 @@
-// components/Breadcrumbs.tsx
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -10,7 +9,7 @@ interface Breadcrumb {
 
 interface BreadcrumbsProps {
   customBreadcrumbs?: Breadcrumb[];
-  className?: string
+  className?: string;
 }
 
 const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ customBreadcrumbs, className }) => {
@@ -19,9 +18,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ customBreadcrumbs, className 
   useEffect(() => {
     const path = window.location.pathname;
     const segments = path.split('/').filter((segment) => segment);
-
     const filteredSegments = segments.filter((segment) => !['category'].includes(segment));
-
     setPathSegments(filteredSegments);
   }, []);
 
@@ -61,7 +58,8 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ customBreadcrumbs, className 
           <span className="mx-2">/</span>
         </li>
         {pathSegments.map((segment, index) => {
-          const href = `/${['brands', ...pathSegments.slice(0, index + 1)].join('/')}`;
+          const basePath = pathSegments[0] === 'brands' ? '' : 'brands';
+          const href = `/${[basePath, ...pathSegments.slice(0, index + 1)].join('/')}`.replace(/\/+/g, '/');
           const displayName = dynamicNames[segment] || decodeURIComponent(segment);
 
           return (

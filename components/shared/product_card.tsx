@@ -19,9 +19,12 @@ const API_URL_IMAGE_PRODUCT = process.env.NEXT_PUBLIC_API_URL_IMAGE_PRODUCT;
 
 export const ProductCard: React.FC<Props> = ({ className, imageUrl, name, searchName, price, id, description }) => {
     return (
-        <div className={`${className} flex flex-col border min-w-[280px] max-w-[280px] w-full h-[450px] justify-between p-3 rounded-lg overflow-hidden`}>
+        <div className={`${className} flex relative flex-col border min-w-[280px] max-w-[280px] w-full h-[470px] justify-between p-3 rounded-lg overflow-hidden`}>
             <Link href={`/product/${searchName}`}>
-                <div className="relative flex justify-center items-center h-[200px] mb-3 mt-3">
+                <div className="flex justify-center items-center h-[200px] mb-3 mt-3">
+                <p className='absolute top-[10px] right-[5px] bg-red-600 text-white px-2 py-1 rounded-full text-sm font-bold shadow-md'>
+                  Скидка
+                </p>
                     <Image 
                         width={200}
                         height={200} 
@@ -38,9 +41,14 @@ export const ProductCard: React.FC<Props> = ({ className, imageUrl, name, search
                     {description}
                 </p>
                 
-                <span className='text-[18px]'>
-                    от <b>{price} Р</b>
-                </span>
+                <div className='relative flex flex-col'>
+                    <span className='text-gray-500 line-through ml-2'>
+                        12142Р
+                    </span>
+                    <span className='text-[18px]'>
+                        от <b>{price} Р</b>
+                    </span>
+                </div>
 
                 <div className='flex flex-row gap-3 mt-2'>
                     <Button variant="outline" className="rounded-[10px] p-2"><Heart size={20} /></Button>

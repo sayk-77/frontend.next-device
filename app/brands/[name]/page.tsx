@@ -110,6 +110,7 @@ export default function PageBrand() {
                             name={item.category.name}
                             count={item.count.toString()}
                             title={item.category.title}
+                            link={`/brands/${brandName}/category/${item.category.title}`}
                             imageUrl={`${API_URL}/images/product/${item.images_category}`}
                         />
                     </div>

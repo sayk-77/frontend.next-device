@@ -3,6 +3,7 @@
 import { Container, ProductCarousel, Title } from "@/components/shared";
 import Breadcrumbs from "@/components/shared/breadCrumb";
 import { Button, ToggleGroup, ToggleGroupItem } from "@/components/ui";
+import useBrandStore from "@/store/storeBrand";
 import axios from "axios";
 import { Database, Palette, Star, ShoppingBasket, Heart, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -14,12 +15,21 @@ const rating = [1,2,3,4,5]
 export default function ProductPage({ params: { searchName } }: { params: { searchName: string } }) {
     const [product, setProduct] = useState<Product>({} as Product)
     
+    const setBrandId = useBrandStore(state => state.setBrandId);
+    const setBrandName = useBrandStore(state => state.setBrandName);
+    
+    const handleBrandClick = (id: number, name: string) => {
+        setBrandId(id);
+        setBrandName(name);
+    };
+    
     useEffect(() => {
         const getProductById  = async (searchName: string) => {
             try {
                 const response = await axios.get(`${API_URL}/products/${searchName}`)
                 setProduct(response.data)
-                console.log(response.data)
+                handleBrandClick(response.data.brand.id, response.data.brand.name)
+                console.log(response.data);
             } catch (err) {
                 console.log(err);
             }

@@ -45,6 +45,7 @@ export const CatalogDevices = () => {
                             name={category.category.name}
                             title={category.category.title}
                             count={category.count}
+                            link={`/catalog/${category.category.name}`}
                             imageUrl={`${API_URL}/images/category/${category.category.categoryImage}`}
                         />
                 </Link>

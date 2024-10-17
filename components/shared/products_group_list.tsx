@@ -37,9 +37,11 @@ export const ProductsGroupList: React.FC<Props> = ({ products, className, title,
             <div className='flex items-center justify-between'>
                 <Title text={title} className='text-[26px] pb-[10px]' />
                 <div className='flex justify-center pr-[30px]'>
+                {!categoryUrl.includes('new') && !categoryUrl.includes('discount') && (
                     <Button variant="link" className=''>
                         <Link href={categoryUrl}>Показать еще</Link>
                     </Button>
+                )}
                 </div>
             </div>
 

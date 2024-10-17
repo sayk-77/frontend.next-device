@@ -23,7 +23,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 const fetchProducts = async (categoryUrl: string): Promise<Product[]> => {
   try {
-    const response = await axios.get(`${API_URL}/catalog/${categoryUrl}`);
+    const response = await axios.get(`${API_URL}/catalog/${categoryUrl}`, {params: {limit: 6}});
     return response.data;
   } catch (err) {
     console.error(err);
@@ -38,10 +38,10 @@ export default function Home() {
   useEffect(() => {
     const loadProducts = async () => {
       const groups = [
-        { title: "Мобильные телефоны", categoryUrl: "mobile" },
-        { title: "Ноутбуки", categoryUrl: "laptop" },
         { title: "Успей купить", categoryUrl: "discounts" },
         { title: "Новинки", categoryUrl: "new" },
+        { title: "Мобильные телефоны", categoryUrl: "mobile" },
+        { title: "Ноутбуки", categoryUrl: "laptop" }
       ];
 
       const fetchedProducts = await Promise.all(

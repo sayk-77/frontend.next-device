@@ -1,8 +1,8 @@
 'use client'
 import { cn } from '@/lib/utils'
-import React from 'react'
+import React, { useState } from 'react'
 import { FilterCheckbox } from './filter_checkbox'
-import { Skeleton } from '../ui'
+import { Skeleton, Input } from '../ui'
 
 interface Item {
   text: string
@@ -10,13 +10,13 @@ interface Item {
 }
 
 interface Props {
-  title: string
+  title?: string
   items: Item[]
   limit?: number
   loading?: boolean
   className?: string
-  name?: string
-  selectedValues?: Set<string>
+  selectedValues: Set<string>
+  onCheckboxChange: (value: string) => void
 }
 
 export const CheckboxFiltersGroup: React.FC<Props> = ({
@@ -25,16 +25,20 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
   limit = 5,
   loading,
   className,
-  name,
-  selectedValues = new Set(),
+  selectedValues,
+  onCheckboxChange,
 }) => {
-  const handleCheckboxChange = (value: string) => {
-    const newSelectedValues = new Set(selectedValues)
-    if (newSelectedValues.has(value)) {
-      newSelectedValues.delete(value)
-    } else {
-      newSelectedValues.add(value)
-    }
+  const [searchValue, setSearchValue] = useState<string>('')
+  const [showAll, setShowAll] = useState<boolean>(false)
+
+  const filteredItems = items.filter(item => 
+    item.text.toLowerCase().includes(searchValue.toLowerCase())
+  )
+
+  const limitItems = showAll ? filteredItems : filteredItems.slice(0, limit)
+
+  const onChangeSearchInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setSearchValue(e.target.value)
   }
 
   if (loading) {
@@ -54,20 +58,34 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
     <div className={cn('', className)}>
       <p className='font-bold mb-3'>{title}</p>
 
+      {showAll && (
+        <div className='mb-5'>
+          <Input
+            onChange={onChangeSearchInput}
+            placeholder='Поиск...'
+            className='bg-gray-50 border-none'
+          />
+        </div>
+      )}
+
       <div className='flex flex-col gap-4 max-h-96 pr-2 overflow-auto scrollbar'>
-        {items.slice(0, limit).map((item, index) => (
+        {limitItems.map((item, index) => (
           <FilterCheckbox
             key={index}
             text={item.text}
             value={item.value}
             checked={selectedValues.has(item.value)}
+            onCheckedChange={() => onCheckboxChange(item.value)}
+            name={title}
           />
         ))}
       </div>
 
       {items.length > limit && (
-        <div>
-          <button className='text-primary mt-3'>Показать все</button>
+        <div className={showAll ? 'border-t border-t-neutral-100 mt-4' : ''}>
+          <button onClick={() => setShowAll(!showAll)} className='text-primary mt-3'>
+            {showAll ? 'Скрыть' : 'Показать все'}
+          </button>
         </div>
       )}
     </div>
