@@ -36,6 +36,7 @@ interface Product {
     name: string
     searchName: string
     description: string
+    discountPrice: number
     price: number
     image: string
 }
@@ -70,7 +71,7 @@ export default function PageBrand() {
         const getNewProduct = async () => {
             try {
                 const response = await axios.get(`${API_URL}/catalog/discounts`, {
-                    params: {limit: 5}
+                    params: {limit: 5, brand: brandName}
                 })
                 setDiscountProduct(response.data)
             } catch (err) {
@@ -94,7 +95,6 @@ export default function PageBrand() {
                     height={300}
                     alt={`${brandInfo.name} logo`}
                 />
-                <Title text={brandName} className="text-[32px] font-extrabold"/>
             </div>
             {
                 brandInfo.banners && brandInfo.banners.length > 0 && <AutoScrollCarousel carouselItems={brandInfo.banners}/>

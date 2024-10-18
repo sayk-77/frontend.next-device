@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Title } from './index';
 import { Button } from '../ui';
 import { Heart } from 'lucide-react';
@@ -11,13 +11,14 @@ interface Props {
     name: string;
     searchName: string
     description: string;
+    discountPrice: number
     price: number;
     className?: string;
 }
 
 const API_URL_IMAGE_PRODUCT = process.env.NEXT_PUBLIC_API_URL_IMAGE_PRODUCT;
 
-export const ProductCard: React.FC<Props> = ({ className, imageUrl, name, searchName, price, id, description }) => {
+export const ProductCard: React.FC<Props> = ({ className, imageUrl, name, searchName, price, id, description, discountPrice }) => {
     return (
         <div className={`${className} flex relative flex-col border min-w-[280px] max-w-[280px] w-full h-[470px] justify-between p-3 rounded-lg overflow-hidden`}>
             <Link href={`/product/${searchName}`}>
@@ -42,11 +43,11 @@ export const ProductCard: React.FC<Props> = ({ className, imageUrl, name, search
                 </p>
                 
                 <div className='relative flex flex-col'>
-                    <span className='text-gray-500 line-through ml-2'>
-                        12142Р
+                    <span className='text-gray-500 line-through'>
+                        {price}
                     </span>
                     <span className='text-[18px]'>
-                        от <b>{price} Р</b>
+                        <b>{price - discountPrice} Р</b>
                     </span>
                 </div>
 

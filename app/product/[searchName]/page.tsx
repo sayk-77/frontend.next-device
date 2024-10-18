@@ -137,7 +137,10 @@ export default function ProductPage({ params: { searchName } }: { params: { sear
                             </div>
                             
                             <div className="flex gap-[30px] items-center justify-between pt-[20px]">
-                                <span className="text-2xl">Цена: от <strong>{product.price}</strong></span>
+                                <div className="flex flex-col relative">
+                                    <span className="text-end text-[18px] line-through absolute top-[-20px] right-0">{product.price}</span>
+                                    <span className="text-2xl">Цена: <strong>{product.price - product.discountPrice}</strong></span>
+                                </div>
                                 <div className="flex items-center gap-5">
                                     <Button className="rounded-[10px]"><ShoppingBasket size={24}/></Button>
                                     <Button className="rounded-[10px]"><Heart size={24}/></Button>

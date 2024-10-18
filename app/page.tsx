@@ -15,6 +15,7 @@ interface Product {
   name: string;
   description: string;
   searchName: string
+  discountPrice: number
   image: string;
   price: number;
 }
@@ -24,6 +25,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
 const fetchProducts = async (categoryUrl: string): Promise<Product[]> => {
   try {
     const response = await axios.get(`${API_URL}/catalog/${categoryUrl}`, {params: {limit: 6}});
+    console.log(response.data)  
     return response.data;
   } catch (err) {
     console.error(err);

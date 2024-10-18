@@ -15,6 +15,7 @@ interface Product {
     name: string;
     description: string;
     searchName: string
+    discountPrice: number
     image: string;
     price: number;
 }
@@ -57,6 +58,7 @@ export const ProductsGroupList: React.FC<Props> = ({ products, className, title,
                             name={product.name}
                             imageUrl={product.image}
                             price={product.price}
+                            discountPrice={product.discountPrice}
                             searchName={product.searchName}
                             description={product.description}
                         />
