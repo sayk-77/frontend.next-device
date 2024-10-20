@@ -13,6 +13,7 @@ interface Product {
     searchName: string;
     description: string;
     categoryTitle: string;
+    discountPrice: number
     image: string;
     price: number;
 }
@@ -31,6 +32,7 @@ export default function CatalogCategoryPage({params}: {params: {category: string
                 const response = await axios.get(`${API_URL}/catalog/${params.category}`)
                 setProducts(response.data)
                 setCategoryTitle(response.data[0].categoryTitle)
+                console.log(response.data)
             } catch (err) {
                 console.log(err)
             }
@@ -52,6 +54,7 @@ export default function CatalogCategoryPage({params}: {params: {category: string
                                 name={product.name}
                                 imageUrl={product.image}
                                 description={product.description}
+                                discountPrice={product.discountPrice}
                                 price={product.price}
                                 searchName={product.searchName}
                             />

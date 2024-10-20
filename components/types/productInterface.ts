@@ -31,4 +31,17 @@ interface Product {
       isMain: boolean; 
     }[];
     reviews: any[] | null; // TODO: add reviews
+    details: {
+      id: number;
+      productId: number;
+      processor: string;
+      ram: string;
+      storage: string;
+      display: string;
+      camera: string;
+      battery: string;
+      os: string;
+      dimensions: string;
+      weight: string;
+    }
   }

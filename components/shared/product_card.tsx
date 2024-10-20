@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { Title } from './index';
@@ -19,6 +21,11 @@ interface Props {
 const API_URL_IMAGE_PRODUCT = process.env.NEXT_PUBLIC_API_URL_IMAGE_PRODUCT;
 
 export const ProductCard: React.FC<Props> = ({ className, imageUrl, name, searchName, price, id, description, discountPrice }) => {
+    
+    useEffect(() => {
+        console.log(price, discountPrice)
+    }, [])
+    
     return (
         <div className={`${className} flex relative flex-col border min-w-[280px] max-w-[280px] w-full h-[470px] justify-between p-3 rounded-lg overflow-hidden`}>
             <Link href={`/product/${searchName}`}>

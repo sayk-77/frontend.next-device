@@ -11,6 +11,7 @@ interface Products {
     name: string;
     description: string;
     searchName: string;
+    discountPrice: number
     image: string;
     price: number;
 }
@@ -52,6 +53,7 @@ export default function BrandCategoryPage({ params }: { params: { category: stri
                             id={prod.id}
                             price={prod.price}
                             description={prod.description}
+                            discountPrice={prod.discountPrice}
                             name={prod.name}
                             searchName={prod.searchName}
                             imageUrl={prod.image}
