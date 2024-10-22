@@ -20,17 +20,16 @@ export const Footer: React.FC<Props> = ({ className }) => {
         </Link>
 
         <div className='flex items-center gap-4'>
-          <Button variant="outline" className='flex items-center gap-1'>
-            О нас
-          </Button>
-
-          <Button variant="outline" className='flex items-center gap-1'>
-            Контакты
-          </Button>
-
-          <Button variant="outline" className='flex items-center gap-1'>
-            Политика конфиденциальности
-          </Button>
+          <Link href="/about">
+            <Button variant="outline" className='flex items-center gap-1'>
+              О нас
+            </Button>
+          </Link>
+          <Link href="/privacy">
+            <Button variant="outline" className='flex items-center gap-1'>
+              Политика конфиденциальности
+            </Button>
+          </Link>
         </div>
       </Container>
     </footer>
