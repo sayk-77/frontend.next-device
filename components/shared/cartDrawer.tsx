@@ -15,7 +15,9 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
     const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0);
 
     return (
-        <div className={`fixed top-0 z-40 right-0 h-full bg-white transition-transform transform ${isOpen ? 'translate-x-0' : 'translate-x-full'} shadow-lg`}>
+        <div 
+            className={`fixed top-0 z-40 right-0 h-full bg-white transition-all duration-500 ease-in-out transform ${isOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'} shadow-lg`}
+        >
             <div className="p-4">
                 <div className='flex items-center gap-[15px] justify-between'>
                     <h2 className="text-lg font-bold">Корзина</h2>

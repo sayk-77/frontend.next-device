@@ -11,7 +11,7 @@ export const FavoritesDrawer: React.FC<FavoritesDrawerProps> = ({ isOpen, onClos
     const { favorites } = useFavoritesStore();
 
     return (
-        <div className={`fixed top-0 z-40 right-0 h-full bg-white transition-transform transform ${isOpen ? 'translate-x-0' : 'translate-x-full'} shadow-lg`}>
+        <div className={`fixed top-0 z-40 right-0 h-full bg-white duration-500 transition-transform transform ${isOpen ? 'translate-x-0' : 'translate-x-full'} shadow-lg`}>
             <div className="p-4 h-full overflow-y-auto">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-bold">Избранные товары</h2>
