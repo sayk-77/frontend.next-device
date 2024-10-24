@@ -9,7 +9,8 @@ import { ArrowRight, Heart, ShoppingCart, User } from 'lucide-react';
 import Link from 'next/link';
 import { useFavoritesStore } from '@/store/favoriteStore';
 import { useCartStore } from '@/store/cartStore';
-import  CartDrawer  from './cartDrawer'
+import CartDrawer from './cartDrawer';
+import { FavoritesDrawer } from './favoriteDrawer'; 
 
 interface Props {
     className?: string;
@@ -19,6 +20,7 @@ export const Header: React.FC<Props> = ({ className }) => {
     const { favorites, initializeFavorites } = useFavoritesStore();
     const { items, initializeCart } = useCartStore();
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [isFavoritesOpen, setIsFavoritesOpen] = useState(false); 
 
     useEffect(() => {
         initializeFavorites();
@@ -30,6 +32,10 @@ export const Header: React.FC<Props> = ({ className }) => {
 
     const handleCartToggle = () => {
         setIsCartOpen(!isCartOpen);
+    };
+
+    const handleFavoritesToggle = () => {
+        setIsFavoritesOpen(!isFavoritesOpen);
     };
 
     return (
@@ -58,15 +64,15 @@ export const Header: React.FC<Props> = ({ className }) => {
                             Войти
                         </Button>
 
-                        <Button variant="outline">
-                            <Link href='/like'>
-                                <div className='relative'>
-                                    <Heart size={24} />
-                                    {favorites.length > 0 && (
-                                        <span className='absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full px-1'>{favorites.length}</span>
-                                    )}
-                                </div>
-                            </Link>
+                        <Button variant="outline" onClick={handleFavoritesToggle}>
+                            <div className='relative'>
+                                <Heart size={24} />
+                                {favorites.length > 0 && (
+                                    <span className='absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full px-1'>
+                                        {favorites.length}
+                                    </span>
+                                )}
+                            </div>
                         </Button>
 
                         <div>
@@ -87,6 +93,12 @@ export const Header: React.FC<Props> = ({ className }) => {
             {isCartOpen && (
                 <div className="fixed inset-0 z-20 bg-black bg-opacity-50 flex justify-end">
                     <CartDrawer isOpen={isCartOpen} onClose={handleCartToggle} />
+                </div>
+            )}
+
+            {isFavoritesOpen && (
+                <div className="fixed inset-0 z-20 bg-black bg-opacity-50 flex justify-end">
+                    <FavoritesDrawer isOpen={isFavoritesOpen} onClose={handleFavoritesToggle} />
                 </div>
             )}
         </>

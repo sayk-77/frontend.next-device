@@ -1,4 +1,3 @@
-// ProductPage.tsx
 'use client';
 
 import { Container, ProductCarousel, Title } from "@/components/shared";
@@ -51,6 +50,7 @@ export default function ProductPage({ params: { searchName } }: { params: { sear
             name: 'Александр',
             age: 29,
             rating: 5,
+            images: [''],
             pros: ['Отличная камера.', 'Высокая производительность.', 'Яркий AMOLED экран.'],
             cons: ['Высокая цена.', 'Нет беспроводной зарядки.'],
             comment: 'Использую Xiaomi 14 Ultra и очень доволен. Камера просто супер!'
@@ -59,6 +59,7 @@ export default function ProductPage({ params: { searchName } }: { params: { sear
             name: 'Мария',
             age: 25,
             rating: 5,
+            images: [''],
             pros: ['Хорошая автономность.', 'Удобный интерфейс.'],
             cons: ['Проблемы с обновлениями.'],
             comment: 'В общем, отличный телефон. Батареи хватает на день, но иногда возникают сбои в обновлениях.'
@@ -67,6 +68,7 @@ export default function ProductPage({ params: { searchName } }: { params: { sear
             name: 'Иван',
             age: 32,
             rating: 5,
+            images: [''],
             pros: ['Хорошая производительность.', 'Приятный дизайн.'],
             cons: ['Плохая поддержка.', 'Не хватает обновлений.'],
             comment: 'Телефон неплохой, но ожидал большего. Не хватает регулярных обновлений.'

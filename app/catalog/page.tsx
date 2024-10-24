@@ -18,6 +18,7 @@ interface Product {
   name: string;
   searchName: string;
   description: string;
+  discountPrice: number
   image: string;
   price: number;
 }
