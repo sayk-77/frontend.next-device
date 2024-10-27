@@ -2,6 +2,7 @@ import React from 'react';
 import { useCartStore } from '@/store/cartStore';
 import { Button } from '../ui';
 import { CartItem } from './cartItem';
+import Link from 'next/link';
 
 interface CartDrawerProps {
     isOpen: boolean;
@@ -42,8 +43,11 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                     )}
                 </div>
                 {items.length > 0 && (
-                    <div className="mt-4">
+                    <div className="mt-4 flex justify-between">
                         <h3 className="font-bold text-[26px]">Итого: {totalPrice} Р</h3>
+                        <Link href="/order">
+                            <Button onClick={onClose}>Оформит заказ</Button>
+                        </Link>
                     </div>
                 )}
             </div>
