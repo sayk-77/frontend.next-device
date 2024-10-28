@@ -22,7 +22,7 @@ export const FavoritesDrawer: React.FC<FavoritesDrawerProps> = ({ isOpen, onClos
                         <p>У вас нет избранных товаров.</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4" onClick={onClose}>
                         {favorites.map(id => (
                             <FavoriteItem key={id} id={id} />
                         ))}

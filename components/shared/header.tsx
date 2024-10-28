@@ -59,10 +59,12 @@ export const Header: React.FC<Props> = ({ className }) => {
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <Button variant="outline" className="flex items-center gap-1">
-                            <User size={16} />
-                            Войти
-                        </Button>
+                        <Link href='/auth'>
+                            <Button variant="outline" className="flex items-center gap-1">
+                                <User size={16} />
+                                Войти
+                            </Button>
+                        </Link>
 
                         <Button variant="outline" onClick={handleFavoritesToggle}>
                             <div className="relative">

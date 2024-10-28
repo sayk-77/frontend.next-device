@@ -8,6 +8,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useClickAway, useDebounce } from 'react-use'
 import Image from 'next/image'
 import useBrandStore from '@/store/storeBrand'
+import { useRouter } from 'next/navigation'
 
 interface Props {
     className?: string
@@ -50,9 +51,19 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
         categories: []
     });
     const ref = useRef<HTMLDivElement>(null);
+    const router = useRouter()
     
     const setBrandId = useBrandStore(state => state.setBrandId);
     const setBrandName = useBrandStore(state => state.setBrandName);
+    
+    const pressEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter' && searchQuery.trim()) {
+            router.push(`/search/${searchQuery}`);
+            setSearchQuery('');
+            setFocused(false);
+            setResults({ products: [], brands: [], categories: [] });
+        }
+    };
     
     const handleBrandClick = (id: number, name: string) => {
         setBrandId(id);
@@ -106,6 +117,7 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
                     onFocus={() => setFocused(true)}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={pressEnter}
                 />
                 
                 {focused && hasResults && (
