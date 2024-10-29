@@ -21,7 +21,7 @@ export const FilterCheckbox: React.FC<FilterChecboxProps> = ({
   return (
     <div className="flex items-center space-x-2">
       <Checkbox
-        onCheckedChange={(checked) => onCheckedChange?.(checked)}
+        onCheckedChange={(checked: boolean) => onCheckedChange?.(checked)}
         checked={checked}
         value={value}
         className="rounded-[8px] w-6 h-6"

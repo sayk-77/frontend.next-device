@@ -82,9 +82,9 @@ const SearchResultsPage = ({ params }: Props) => {
                 )}
 
                 {results.brands && results.brands.length > 0 && (
-                    <div>
+                    <div className=''>
                         <h2 className="text-xl font-semibold mb-2">Бренды</h2>
-                        <div className="flex flex-wrap gap-4">
+                        <div className="flex flex-wrap gap-4 mb-[50px]">
                             {results.brands.map(item => (
                                 <Link href={`/brands/${item.name}`} key={item.id} className="flex flex-col items-center w-[150px]">
                                     {item.imageUrl && (

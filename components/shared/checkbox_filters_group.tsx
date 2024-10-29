@@ -14,6 +14,7 @@ interface Props {
   items: Item[]
   limit?: number
   loading?: boolean
+  name?: string
   className?: string
   selectedValues: Set<string>
   onCheckboxChange: (value: string) => void
