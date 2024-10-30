@@ -1,6 +1,7 @@
 'use client'
 
 import { Container, Filters, ProductCard, Title } from "@/components/shared";
+import { LaptopFilters } from "@/components/shared/laptopFilters";
 import { ProductCardSkeleton } from "@/components/shared/skeletonCard";
 import { Skeleton } from "@/components/ui";
 import axios from "axios";
@@ -48,7 +49,7 @@ export default function CatalogCategoryPage({ params }: { params: { category: st
       <Container>
         <Title text={categoryTitle} className="text-[28px] pt-[10px]" />
         <div className="flex pt-[40px] pb-[40px] gap-[80px]">
-          <Filters onFilterChange={handleFilterChange} />
+          {params.category == 'laptop' ? <LaptopFilters onFilterChange={handleFilterChange}/> : <Filters onFilterChange={handleFilterChange} />}
           <div className="flex gap-[20px] flex-wrap">
             {products && products.length > 0 ? products.map((product) => (
               <ProductCard

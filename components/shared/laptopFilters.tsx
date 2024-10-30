@@ -16,7 +16,7 @@ interface Product {
   searchName: string;
   description: string;
   categoryTitle: string;
-  discountPrice: number
+  discountPrice: number;
   image: string;
   price: number;
 }
@@ -33,14 +33,14 @@ interface ScreenSizeProps {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const Filters: React.FC<Props> = ({ className, onFilterChange }) => {
-  const [prices, setPrice] = useState<PriceProps>({ priceFrom: 0, priceTo: 1000000 });
-  const [screenSize, setScreenSize] = useState<ScreenSizeProps>({ screenFrom: 0, screenTo: 15 });
+export const LaptopFilters: React.FC<Props> = ({ className, onFilterChange }) => {
+  const [prices, setPrice] = useState<PriceProps>({ priceFrom: 0, priceTo: 200000 });
+  const [screenSize, setScreenSize] = useState<ScreenSizeProps>({ screenFrom: 10, screenTo: 17 });
   const [brands, setBrands] = useState<Set<string>>(new Set());
   const [memories, setMemories] = useState<Set<string>>(new Set());
   const [ram, setRam] = useState<Set<string>>(new Set());
-  const [cameraQualities, setCameraQualities] = useState<Set<string>>(new Set());
-  const [os, setOs] = useState<Set<string>>(new Set());
+  const [gpuType, setGpuType] = useState<Set<string>>(new Set());
+  const [cpuType, setCpuType] = useState<Set<string>>(new Set()); // Новое состояние для типа процессора
 
   const updatePrice = (name: keyof PriceProps, value: number) => {
     setPrice({ ...prices, [name]: value });
@@ -77,10 +77,9 @@ export const Filters: React.FC<Props> = ({ className, onFilterChange }) => {
       brands: Array.from(brands),
       memories: Array.from(memories),
       ram: Array.from(ram),
-      cameraQualities: Array.from(cameraQualities),
-      os: Array.from(os),
+      gpuType: Array.from(gpuType),
+      cpuType: Array.from(cpuType), // Добавление типа процессора в фильтры
     };
-
 
     try {
       const response = await axios.post(`${API_URL}/product/${category}/query`, filters);
@@ -95,18 +94,18 @@ export const Filters: React.FC<Props> = ({ className, onFilterChange }) => {
     fetchFilteredProducts();
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
-  });
+      behavior: 'smooth',
+    });
   };
   
   const resetFilters = () => {
-    setPrice({ priceFrom: 0, priceTo: 1000000 });
-    setScreenSize({ screenFrom: 0, screenTo: 15 });
+    setPrice({ priceFrom: 0, priceTo: 200000 });
+    setScreenSize({ screenFrom: 10, screenTo: 17 });
     setBrands(new Set());
     setMemories(new Set());
     setRam(new Set());
-    setCameraQualities(new Set());
-    setOs(new Set());
+    setGpuType(new Set());
+    setCpuType(new Set());
   };
 
   return (
@@ -114,14 +113,38 @@ export const Filters: React.FC<Props> = ({ className, onFilterChange }) => {
       <Title text='Фильтрация' size='sm' className='mb-5 font-bold' />
 
       <form onSubmit={handleSubmit}>
+        <div className="mt-4 border-t border-t-neutral-100 py-4">
+          <Title size='xs' className='font-medium' text='Цена от и до:' />
+          <div className='flex gap-2 mb-4'>
+            <Input
+              type='number'
+              placeholder='0'
+              min={0}
+              max={200000}
+              value={String(prices.priceFrom)}
+              onChange={(e) => updatePrice('priceFrom', Number(e.target.value))}
+              className='w-24'
+            />
+            <Input
+              type='number'
+              min={1000}
+              max={200000}
+              placeholder='200000'
+              value={String(prices.priceTo)}
+              onChange={(e) => updatePrice('priceTo', Number(e.target.value))}
+              className='w-24'
+            />
+          </div>
+        </div>
+
         <div className="mb-4">
           <Title text='Бренд' size='xs' className='font-medium' />
           <CheckboxFiltersGroup
             name='brands'
             items={[
-              { text: 'Apple', value: 'Apple' },
+              { text: 'Honor', value: 'Honor' },
+              { text: 'Acer', value: 'Acer' },
               { text: 'Samsung', value: 'Samsung' },
-              { text: 'Xiaomi', value: 'Xiaomi' },
             ]}
             selectedValues={brands}
             onCheckboxChange={(value) => toggleCheckbox(setBrands, value)}
@@ -134,8 +157,8 @@ export const Filters: React.FC<Props> = ({ className, onFilterChange }) => {
             <Input
               type='number'
               placeholder='От'
-              min={0}
-              max={15}
+              min={10}
+              max={17}
               step="0.1"
               value={String(screenSize.screenFrom)}
               onChange={(e) => updateScreenSize('screenFrom', Number(e.target.value))}
@@ -143,36 +166,12 @@ export const Filters: React.FC<Props> = ({ className, onFilterChange }) => {
             />
             <Input
               type='number'
-              min={15}
-              max={30}
+              min={10}
+              max={17}
               step="0.1"
               placeholder='До'
               value={String(screenSize.screenTo)}
               onChange={(e) => updateScreenSize('screenTo', Number(e.target.value))}
-              className='w-24'
-            />
-          </div>
-        </div>
-
-        <div className="mt-4 border-t border-t-neutral-100 py-4">
-          <Title size='xs' className='font-medium' text='Цена от и до:' />
-          <div className='flex gap-2 mb-4'>
-            <Input
-              type='number'
-              placeholder='0'
-              min={0}
-              max={1000000}
-              value={String(prices.priceFrom)}
-              onChange={(e) => updatePrice('priceFrom', Number(e.target.value))}
-              className='w-24'
-            />
-            <Input
-              type='number'
-              min={100}
-              max={1000000}
-              placeholder='1000000'
-              value={String(prices.priceTo)}
-              onChange={(e) => updatePrice('priceTo', Number(e.target.value))}
               className='w-24'
             />
           </div>
@@ -186,6 +185,7 @@ export const Filters: React.FC<Props> = ({ className, onFilterChange }) => {
               { text: '4 GB', value: '4' },
               { text: '8 GB', value: '8' },
               { text: '16 GB', value: '16' },
+              { text: '32 GB', value: '32' },
             ]}
             selectedValues={ram}
             onCheckboxChange={(value) => toggleCheckbox(setRam, value)}
@@ -197,41 +197,40 @@ export const Filters: React.FC<Props> = ({ className, onFilterChange }) => {
           <CheckboxFiltersGroup
             name='memories'
             items={[
-              { text: '64 GB', value: '64' },
               { text: '128 GB', value: '128' },
               { text: '256 GB', value: '256' },
               { text: '512 GB', value: '512' },
               { text: '1 ТБ', value: '1024' },
+              { text: '2 ТБ', value: '2048' },
             ]}
             selectedValues={memories}
             onCheckboxChange={(value) => toggleCheckbox(setMemories, value)}
           />
         </div>
-
+        
         <div className="mt-4">
-          <Title text='Качество камеры' size='xs' className='font-medium' />
+          <Title text='Тип процессора' size='xs' className='font-medium' />
           <CheckboxFiltersGroup
-            name='cameraQualities'
+            name='cpuType'
             items={[
-              { text: '12 MP', value: '12' },
-              { text: '48 MP', value: '48' },
-              { text: '108 MP', value: '108' },
+              { text: 'Intel', value: 'Intel' },
+              { text: 'AMD', value: 'AMD' },
             ]}
-            selectedValues={cameraQualities}
-            onCheckboxChange={(value) => toggleCheckbox(setCameraQualities, value)}
+            selectedValues={cpuType}
+            onCheckboxChange={(value) => toggleCheckbox(setCpuType, value)}
           />
         </div>
 
         <div className="mt-4">
-          <Title text='Операционная система' size='xs' className='font-medium' />
+          <Title text='Тип видеокарты' size='xs' className='font-medium' />
           <CheckboxFiltersGroup
-            name='os'
+            name='gpuType'
             items={[
-              { text: 'Android', value: 'Android' },
-              { text: 'IOS', value: 'iOS' },
+              { text: 'Интегрированная', value: 'integrated' },
+              { text: 'Дискретная', value: 'discrete' },
             ]}
-            selectedValues={os}
-            onCheckboxChange={(value) => toggleCheckbox(setOs, value)}
+            selectedValues={gpuType}
+            onCheckboxChange={(value) => toggleCheckbox(setGpuType, value)}
           />
         </div>
 
