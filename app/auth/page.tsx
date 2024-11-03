@@ -1,15 +1,43 @@
 'use client'
 
+import { useState } from 'react';
 import { Button } from '@/components/ui';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import axios from 'axios';
+import { useAuthStore } from '@/store/authStore';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export default function AuthPage() {
     const [isRegister, setIsRegister] = useState(false);
+    const [formData, setFormData] = useState({ email: '', password: '', firstName: '', lastName: '' });
+    const router = useRouter();
+    const {login} = useAuthStore()
 
     const toggleAuthMode = () => setIsRegister(!isRegister);
-    const router = useRouter()
+
+    const handleInputChange = (e: { target: { id: any; value: any; }; }) => {
+        const { id, value } = e.target;
+        setFormData({ ...formData, [id]: value });
+    };
+
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+        e.preventDefault();
+        
+        const url = isRegister ? 'Register' : 'Login';
+
+        try {
+            const response = await axios.post(`${API_URL}/${url}`, formData);
+            if (response.status === 200) {
+                localStorage.setItem("token", response.data.user.token)
+                login()
+                router.push('/profile');
+            }
+        } catch (error) {
+            console.error('Ошибка при отправке данных:', error);
+        }
+    };
 
     return (
         <div className="flex justify-center pt-[100px]">
@@ -18,7 +46,7 @@ export default function AuthPage() {
                     {isRegister ? 'Регистрация' : 'Вход'}
                 </h2>
                 
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={handleSubmit}>
                     {isRegister && (
                         <>
                             <div>
@@ -28,8 +56,9 @@ export default function AuthPage() {
                                 <input
                                     type="text"
                                     id="firstName"
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-orange-500"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                                     required
+                                    onChange={handleInputChange}
                                 />
                             </div>
                             <div>
@@ -39,8 +68,9 @@ export default function AuthPage() {
                                 <input
                                     type="text"
                                     id="lastName"
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-orange-500"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                                     required
+                                    onChange={handleInputChange}
                                 />
                             </div>
                         </>
@@ -53,8 +83,9 @@ export default function AuthPage() {
                         <input
                             type="email"
                             id="email"
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-orange-500"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                             required
+                            onChange={handleInputChange}
                         />
                     </div>
                     
@@ -65,27 +96,20 @@ export default function AuthPage() {
                         <input
                             type="password"
                             id="password"
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-orange-500"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                             required
+                            onChange={handleInputChange}
                         />
                     </div>
                     
-                    
-                    <Button
-                        type="submit"
-                        className="w-full"
-                        onClick={() => router.push('/profile')}
-                    >
+                    <Button type="submit" className="w-full">
                         {isRegister ? 'Зарегистрироваться' : 'Войти'}
                     </Button>
                 </form>
 
                 <p className="text-sm text-center text-gray-600 mt-4">
                     {isRegister ? 'Уже есть аккаунт?' : 'Нет аккаунта?'}{' '}
-                    <Button
-                        variant="link"
-                        onClick={toggleAuthMode}
-                    >
+                    <Button variant="link" onClick={toggleAuthMode}>
                         {isRegister ? 'Войти' : 'Зарегистрироваться'}
                     </Button>
                 </p>

@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Heart, ShoppingCart, User } from 'lucide-react';
+import { ArrowRight, Heart, ShoppingCart, User, LogOut } from 'lucide-react';
 import { useFavoritesStore } from '@/store/favoriteStore';
 import { useCartStore } from '@/store/cartStore';
+import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 import { Container, SearchInput } from './index';
 import { Button } from '../ui';
@@ -19,13 +20,19 @@ interface Props {
 export const Header: React.FC<Props> = ({ className }) => {
     const { favorites, initializeFavorites } = useFavoritesStore();
     const { items, initializeCart } = useCartStore();
+    const { isAuthenticated, login, logout } = useAuthStore();
+
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
 
     useEffect(() => {
         initializeFavorites();
         initializeCart();
-    }, [initializeFavorites, initializeCart]);
+
+        if (localStorage.getItem('token')) {
+            login();
+        }
+    }, [initializeFavorites, initializeCart, login]);
 
     const totalItems = items.reduce((total, item) => total + item.quantity, 0);
     const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -36,6 +43,11 @@ export const Header: React.FC<Props> = ({ className }) => {
 
     const handleFavoritesToggle = () => {
         setIsFavoritesOpen((prev) => !prev);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        logout();
     };
 
     return (
@@ -59,12 +71,27 @@ export const Header: React.FC<Props> = ({ className }) => {
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <Link href='/auth'>
-                            <Button variant="outline" className="flex items-center gap-1">
-                                <User size={16} />
-                                Войти
-                            </Button>
-                        </Link>
+                        {isAuthenticated ? (
+                            <>
+                                <Link href='/profile'>
+                                    <Button variant="outline" className="flex items-center gap-1">
+                                        <User size={16} />
+                                        Профиль
+                                    </Button>
+                                </Link>
+                                <Button variant="outline" onClick={handleLogout} className="flex items-center gap-1">
+                                    <LogOut size={16} />
+                                    Выйти
+                                </Button>
+                            </>
+                        ) : (
+                            <Link href='/auth'>
+                                <Button variant="outline" className="flex items-center gap-1">
+                                    <User size={16} />
+                                    Войти
+                                </Button>
+                            </Link>
+                        )}
 
                         <Button variant="outline" onClick={handleFavoritesToggle}>
                             <div className="relative">

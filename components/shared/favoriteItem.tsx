@@ -59,14 +59,14 @@ export const FavoriteItem: React.FC<Props> = ({ id }) => {
 
     return (
         <div className="flex flex-col relative border justify-around p-2 rounded-lg overflow-hidden w-[200px] h-[370px]">
+            <Button 
+                variant="outline" 
+                className="absolute w-8 h-8 top-2 left-2 p-1"
+                onClick={handleRemoveFavorite}
+            >
+                <Heart size={20} color="red" />
+            </Button>
             <Link href={`/product/${product.searchName}`}>
-                <Button 
-                    variant="outline" 
-                    className="absolute w-8 h-8 top-2 left-2 p-1"
-                    onClick={handleRemoveFavorite}
-                >
-                    <Heart size={20} color="red" />
-                </Button>
                 <div className="flex justify-center items-center h-[150px] mb-2 mt-2">
                     {product.discountPrice > 0 && (
                         <p className='absolute top-[5px] right-[5px] bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold shadow-md'>

@@ -39,7 +39,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                             />
                         ))
                     ) : (
-                        <p className="text-center text-gray-500 mt-4">Корзина пуста</p>
+                        <div className="flex items-center justify-center h-full">Корзина пуста</div>
                     )}
                 </div>
                 {items.length > 0 && (
