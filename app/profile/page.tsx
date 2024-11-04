@@ -1,101 +1,122 @@
 'use client';
 
 import { Button } from "@/components/ui";
-import { useState } from "react";
+import axios from 'axios';
+import { useEffect, useState } from "react";
 
-interface UserInfo {
-    firstName: string;
-    lastName: string;
-    email: string;
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
 
-interface Address {
-    id: number;
-    addressLine: string;
-}
-
-interface Order {
-    id: number;
-    date: string;
-    status: string;
-}
-
-const mockUserInfo: UserInfo = {
-    firstName: "Иван",
-    lastName: "Иванов",
-    email: "ivan.ivanov@example.com",
+const orderStatusDictionary = {
+    "pending": "В ожидании",
+    "shipped": "Отгружен",
+    "delivered": "Доставлен",
+    "canceled": "Отменен",
 };
-
-const mockAddresses: Address[] = [
-    { id: 1, addressLine: "Улица Пушкина, дом 1" },
-    { id: 2, addressLine: "Улица Лермонтова, дом 2" },
-];
-
-const mockOrders: Order[] = [
-    { id: 101, date: "2024-10-01", status: "Доставлен" },
-    { id: 102, date: "2024-10-05", status: "В обработке" },
-    { id: 103, date: "2024-10-10", status: "Отменен" },
-];
 
 export default function ProfilePage() {
     const [selectedSection, setSelectedSection] = useState<'info' | 'addresses' | 'orders'>('info');
     const [showEditInfoModal, setShowEditInfoModal] = useState(false);
     const [showAddAddressModal, setShowAddAddressModal] = useState(false);
     const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+    const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+    const [addresses, setAddresses] = useState<Address[]>([]);
+    const [orders, setOrders] = useState<Order[]>([]);
 
-    const [userInfo, setUserInfo] = useState(mockUserInfo);
-    const [editableUserInfo, setEditableUserInfo] = useState(userInfo);
-    const [newAddress, setNewAddress] = useState("");
+    const [editableUserInfo, setEditableUserInfo] = useState<UserInfo>({
+        firstName: '',
+        lastName: '',
+        email: ''
+    });
+    const [newAddress, setNewAddress] = useState<Address>({
+        id: 0,
+        country: '',
+        city: '',
+        street: '',
+        postalCode: '',
+    });
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [oldPasswordError, setOldPasswordError] = useState("");
     const [formErrors, setFormErrors] = useState({ firstName: "", lastName: "", email: "" });
 
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/user`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`, 
+                    }
+                });
+                const { user } = response.data;
+
+                setUserInfo({
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                });
+                setAddresses(user.addresses.map((addr: any) => ({
+                    id: addr.id,
+                    country: addr.country,
+                    city: addr.city,
+                    street: addr.street,
+                    postalCode: addr.postalCode
+                })));
+                setOrders(user.orders.map((order: any) => ({
+                    id: order.id,
+                    createdAt: order.createdAt,
+                    status: order.status,
+                })));
+            } catch (error) {
+                console.error("Ошибка при загрузке данных пользователя:", error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
     const handleSectionChange = (section: 'info' | 'addresses' | 'orders') => setSelectedSection(section);
 
     const validateForm = () => {
         const errors = { firstName: "", lastName: "", email: "" };
-
-        if (!editableUserInfo.firstName) errors.firstName = "Имя обязательно";
-        if (!editableUserInfo.lastName) errors.lastName = "Фамилия обязательна";
-        if (!editableUserInfo.email || !/\S+@\S+\.\S+/.test(editableUserInfo.email)) errors.email = "Неверный формат почты";
-
+        if (!editableUserInfo?.firstName) errors.firstName = "Имя обязательно";
+        if (!editableUserInfo?.lastName) errors.lastName = "Фамилия обязательна";
+        if (!editableUserInfo?.email || !/\S+@\S+\.\S+/.test(editableUserInfo.email)) errors.email = "Неверный формат почты";
         setFormErrors(errors);
         return !errors.firstName && !errors.lastName && !errors.email;
     };
 
     const validatePassword = () => {
         let isValid = true;
-
         if (oldPassword === "") {
             setOldPasswordError("Введите текущий пароль");
             isValid = false;
         } else {
             setOldPasswordError("");
         }
-
         if (newPassword.length < 8 || !/\d/.test(newPassword) || !/[a-zA-Z]/.test(newPassword)) {
             setPasswordError("Пароль должен содержать минимум 8 символов, включая буквы и цифры");
             isValid = false;
         } else {
             setPasswordError("");
         }
-
         return isValid;
     };
 
     const handleSaveInfo = () => {
-        if (validateForm()) {
+        if (validateForm() && editableUserInfo) {
             setUserInfo(editableUserInfo);
             setShowEditInfoModal(false);
         }
     };
 
     const handleSaveAddress = () => {
-        mockAddresses.push({ id: mockAddresses.length + 1, addressLine: newAddress });
-        setShowAddAddressModal(false);
-        setNewAddress("");
+        if (newAddress.country && newAddress.city && newAddress.street && newAddress.postalCode) {
+            setAddresses([...addresses, { ...newAddress, id: addresses.length + 1 }]);
+            setShowAddAddressModal(false);
+            setNewAddress({ id: 0, country: '', city: '', street: '', postalCode: '' });
+        }
     };
 
     const handleSavePassword = () => {
@@ -124,17 +145,14 @@ export default function ProfilePage() {
                 </div>
 
                 <div>
-                    {selectedSection === 'info' && (
+                    {selectedSection === 'info' && userInfo && (
                         <div className="mb-6">
                             <h3 className="text-xl font-semibold mb-2">Информация о пользователе</h3>
                             <div className="border p-4 rounded-md shadow-sm">
                                 <p><span className="font-medium">Имя:</span> {userInfo.firstName}</p>
                                 <p><span className="font-medium">Фамилия:</span> {userInfo.lastName}</p>
                                 <p><span className="font-medium">Почта:</span> {userInfo.email}</p>
-                                <Button onClick={() => {
-                                    setShowEditInfoModal(true);
-                                    setEditableUserInfo(userInfo)
-                                }} variant="link">
+                                <Button onClick={() => { setShowEditInfoModal(true); setEditableUserInfo(userInfo); }} variant="link">
                                     Изменить информацию
                                 </Button>
                                 <Button onClick={() => setShowChangePasswordModal(true)} variant="link" className="mt-2">
@@ -148,9 +166,9 @@ export default function ProfilePage() {
                         <div className="mb-6">
                             <h3 className="text-xl font-semibold mb-2">Мои адреса</h3>
                             <div className="space-y-2">
-                                {mockAddresses.map(address => (
-                                    <div key={address.id} className="border p-4 rounded-md shadow-sm">
-                                        {address.addressLine}
+                                {addresses.map(addr => (
+                                    <div key={addr.id} className="border p-4 rounded-md shadow-sm">
+                                        {`${addr.country}, г.${addr.city}, ул.${addr.street}, ${addr.postalCode}`}
                                     </div>
                                 ))}
                             </div>
@@ -159,53 +177,55 @@ export default function ProfilePage() {
                             </Button>
                         </div>
                     )}
-                    
+
                     {selectedSection === 'orders' && (
                         <div className="mb-6">
                             <h3 className="text-xl font-semibold mb-2">Мои заказы</h3>
                             <ul className="space-y-2">
-                                {mockOrders.map(order => (
+                            {orders.map(order => {
+                                const formattedDate = new Date(order.createdAt).toISOString().split('T')[0];
+                            
+                                return (
                                     <li key={order.id} className="border p-4 rounded-md shadow-sm">
                                         <p><span className="font-medium">Заказ №:</span> {order.id}</p>
-                                        <p><span className="font-medium">Дата:</span> {order.date}</p>
-                                        <p><span className="font-medium">Статус:</span> {order.status}</p>
+                                        <p><span className="font-medium">Дата:</span> {formattedDate}</p>
+                                        <p><span className="font-medium">Статус:</span> {orderStatusDictionary[order.status] || order.status}</p>
                                     </li>
-                                ))}
+                                );
+                            })}
                             </ul>
                         </div>
                     )}
                 </div>
             </div>
 
+
             {showEditInfoModal && (
-                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-                        <h3 className="text-xl font-semibold mb-4">Редактировать информацию</h3>
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white rounded-lg p-6">
+                        <h4 className="text-lg font-semibold mb-4">Изменить информацию</h4>
                         <input
                             type="text"
                             placeholder="Имя"
                             value={editableUserInfo.firstName}
-                            onChange={(e) => setEditableUserInfo({ ...editableUserInfo, firstName: e.target.value })}
-                            className="w-full p-2 mb-2 border rounded"
+                            onChange={e => setEditableUserInfo({ ...editableUserInfo, firstName: e.target.value })}
+                            className={`border w-full p-2 mb-2 rounded ${formErrors.firstName ? 'border-red-500' : ''}`}
                         />
-                        {formErrors.firstName && <p className="text-red-500 text-sm">{formErrors.firstName}</p>}
                         <input
                             type="text"
                             placeholder="Фамилия"
                             value={editableUserInfo.lastName}
-                            onChange={(e) => setEditableUserInfo({ ...editableUserInfo, lastName: e.target.value })}
-                            className="w-full p-2 mb-2 border rounded"
+                            onChange={e => setEditableUserInfo({ ...editableUserInfo, lastName: e.target.value })}
+                            className={`border w-full p-2 mb-2 rounded ${formErrors.lastName ? 'border-red-500' : ''}`}
                         />
-                        {formErrors.lastName && <p className="text-red-500 text-sm">{formErrors.lastName}</p>}
                         <input
                             type="email"
-                            placeholder="Почта"
+                            placeholder="Электронная почта"
                             value={editableUserInfo.email}
-                            onChange={(e) => setEditableUserInfo({ ...editableUserInfo, email: e.target.value })}
-                            className="w-full p-2 mb-2 border rounded"
+                            onChange={e => setEditableUserInfo({ ...editableUserInfo, email: e.target.value })}
+                            className={`border w-full p-2 mb-2 rounded ${formErrors.email ? 'border-red-500' : ''}`}
                         />
-                        {formErrors.email && <p className="text-red-500 text-sm">{formErrors.email}</p>}
-                        <div className="flex justify-end space-x-2">
+                        <div className="flex justify-between">
                             <Button onClick={handleSaveInfo}>Сохранить</Button>
                             <Button onClick={() => setShowEditInfoModal(false)} variant="outline">Отменить</Button>
                         </div>
@@ -214,18 +234,39 @@ export default function ProfilePage() {
             )}
 
             {showAddAddressModal && (
-                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-                        <h3 className="text-xl font-semibold mb-4">Добавить адрес</h3>
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white rounded-lg p-6">
+                        <h4 className="text-lg font-semibold mb-4">Добавить адрес</h4>
                         <input
                             type="text"
-                            placeholder="Новый адрес"
-                            value={newAddress}
-                            onChange={(e) => setNewAddress(e.target.value)}
-                            className="w-full p-2 mb-2 border rounded"
+                            placeholder="Страна"
+                            value={newAddress.country}
+                            onChange={e => setNewAddress({ ...newAddress, country: e.target.value })}
+                            className="border w-full p-2 mb-2 rounded"
                         />
-                        <div className="flex justify-end space-x-2">
-                            <Button onClick={handleSaveAddress}>Сохранить</Button>
+                        <input
+                            type="text"
+                            placeholder="Город"
+                            value={newAddress.city}
+                            onChange={e => setNewAddress({ ...newAddress, city: e.target.value })}
+                            className="border w-full p-2 mb-2 rounded"
+                        />
+                        <input
+                            type="text"
+                            placeholder="Улица"
+                            value={newAddress.street}
+                            onChange={e => setNewAddress({ ...newAddress, street: e.target.value })}
+                            className="border w-full p-2 mb-2 rounded"
+                        />
+                        <input
+                            type="text"
+                            placeholder="Почтовый индекс"
+                            value={newAddress.postalCode}
+                            onChange={e => setNewAddress({ ...newAddress, postalCode: e.target.value })}
+                            className="border w-full p-2 mb-2 rounded"
+                        />
+                        <div className="flex justify-between">
+                            <Button onClick={handleSaveAddress}>Добавить</Button>
                             <Button onClick={() => setShowAddAddressModal(false)} variant="outline">Отменить</Button>
                         </div>
                     </div>
@@ -233,26 +274,24 @@ export default function ProfilePage() {
             )}
 
             {showChangePasswordModal && (
-                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-                        <h3 className="text-xl font-semibold mb-4">Изменить пароль</h3>
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white rounded-lg p-6">
+                        <h4 className="text-lg font-semibold mb-4">Изменить пароль</h4>
                         <input
                             type="password"
-                            placeholder="Старый пароль"
+                            placeholder="Текущий пароль"
                             value={oldPassword}
-                            onChange={(e) => setOldPassword(e.target.value)}
-                            className="w-full p-2 mb-2 border rounded"
+                            onChange={e => setOldPassword(e.target.value)}
+                            className={`border w-full p-2 mb-2 rounded ${oldPasswordError ? 'border-red-500' : ''}`}
                         />
-                        {oldPasswordError && <p className="text-red-500 text-sm">{oldPasswordError}</p>}
                         <input
                             type="password"
                             placeholder="Новый пароль"
                             value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            className="w-full p-2 mb-2 border rounded"
+                            onChange={e => setNewPassword(e.target.value)}
+                            className={`border w-full p-2 mb-2 rounded ${passwordError ? 'border-red-500' : ''}`}
                         />
-                        {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
-                        <div className="flex justify-end space-x-2">
+                        <div className="flex justify-between">
                             <Button onClick={handleSavePassword}>Сохранить</Button>
                             <Button onClick={() => setShowChangePasswordModal(false)} variant="outline">Отменить</Button>
                         </div>

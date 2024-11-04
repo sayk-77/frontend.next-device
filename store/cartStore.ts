@@ -1,4 +1,3 @@
-import { Port_Lligat_Sans } from 'next/font/google';
 import { create } from 'zustand';
 
 interface CartItem {
@@ -15,12 +14,13 @@ interface CartState {
     initializeCart: () => void;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const useCartStore = create<CartState>((set) => ({
     items: [],
     addItem: async (productId, quantity, price) => {
-        const token = localStorage.getItem('token');
+        const isBrowser = typeof window !== 'undefined';
+        const token = isBrowser ? localStorage.getItem('token') : null;
 
         set((state) => {
             const existingItem = state.items.find(item => item.productId === productId);
@@ -32,7 +32,9 @@ export const useCartStore = create<CartState>((set) => ({
                   )
                 : [...state.items, { productId, quantity, price }];
 
-            localStorage.setItem('cartItems', JSON.stringify(updatedItems));
+            if (isBrowser) {
+                localStorage.setItem('cartItems', JSON.stringify(updatedItems));
+            }
 
             return { items: updatedItems };
         });
@@ -42,11 +44,14 @@ export const useCartStore = create<CartState>((set) => ({
         }
     },
     removeItem: async (productId: number) => {
-        const token = localStorage.getItem('token');
+        const isBrowser = typeof window !== 'undefined';
+        const token = isBrowser ? localStorage.getItem('token') : null;
 
         set((state) => {
             const updatedItems = state.items.filter(item => item.productId !== productId);
-            localStorage.setItem('cartItems', JSON.stringify(updatedItems));
+            if (isBrowser) {
+                localStorage.setItem('cartItems', JSON.stringify(updatedItems));
+            }
 
             return { items: updatedItems };
         });
@@ -57,11 +62,16 @@ export const useCartStore = create<CartState>((set) => ({
     },
     clearCart: () => {
         set({ items: [] });
-        localStorage.removeItem('cartItems');
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('cartItems');
+        }
     },
     initializeCart: () => {
-        const storedItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-        set({ items: storedItems });
+        const isBrowser = typeof window !== 'undefined';
+        if (isBrowser) {
+            const storedItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+            set({ items: storedItems });
+        }
     },
 }));
 

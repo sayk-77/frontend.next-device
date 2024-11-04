@@ -24,6 +24,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toggle": "^1.1.0",
     "@radix-ui/react-toggle-group": "^1.1.0",
+    "@stripe/stripe-js": "^4.9.0",
     "@types/bcrypt": "^5.0.2",
     "@types/qs": "^6.9.16",
     "axios": "^1.7.7",
