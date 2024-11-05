@@ -1,10 +1,5 @@
-'use client'
-
 import Image from 'next/image';
 import Link from 'next/link';
-
-import useBrandStore from '@/store/storeBrand';
-import { useEffect } from 'react';
 
 interface CategoryCardProps {
     id: number
@@ -16,13 +11,7 @@ interface CategoryCardProps {
 }
 
 export const CategoryCard: React.FC<CategoryCardProps> = ({id, name, count, imageUrl, title, link }) => {
-    const {brandId, brandName} = useBrandStore()
-    
-    useEffect(() => {
-        console.log(name, count, id, imageUrl, title);
-    }, [])
-    
-    return (
+        return (
         <Link href={link}>
             <div className="flex flex-col items-center p-4 bg-white border rounded-lg shadow-md w-52 h-52 hover:text-orange-500">
                     <div className="relative w-full h-32 mb-2">

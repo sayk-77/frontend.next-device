@@ -12,8 +12,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
 export default function AuthPage() {
     const [isRegister, setIsRegister] = useState(false);
     const [formData, setFormData] = useState({ email: '', password: '', firstName: '', lastName: '' });
+    const [error, setError] = useState('');
     const router = useRouter();
-    const {login} = useAuthStore()
+    const { login } = useAuthStore();
 
     const toggleAuthMode = () => setIsRegister(!isRegister);
 
@@ -30,12 +31,14 @@ export default function AuthPage() {
         try {
             const response = await axios.post(`${API_URL}/${url}`, formData);
             if (response.status === 200) {
-                localStorage.setItem("token", response.data.user.token)
-                login()
+                localStorage.setItem("token", response.data.user.token);
+                login();
                 router.push('/profile');
+                setError('');
             }
         } catch (error) {
             console.error('Ошибка при отправке данных:', error);
+            setError('Неверные данные'); 
         }
     };
 
@@ -105,6 +108,12 @@ export default function AuthPage() {
                     <Button type="submit" className="w-full">
                         {isRegister ? 'Зарегистрироваться' : 'Войти'}
                     </Button>
+
+                    {error && (
+                        <p className="text-red-500 text-sm text-center mt-4">
+                            {error}
+                        </p>
+                    )}
                 </form>
 
                 <p className="text-sm text-center text-gray-600 mt-4">

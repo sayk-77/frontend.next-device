@@ -43,3 +43,16 @@ html {
     --radius: 18px;
   }
 }
+
+.Toastify__toast--success {
+  background-color: #FFA500; 
+  color: white;
+}
+.Toastify__toast--error {
+  background-color: #FF6347; 
+  color: white;
+}
+.Toastify__toast--info {
+  background-color: #FFD700;
+  color: white;
+}

@@ -1,0 +1,139 @@
+Date : 2024-11-05 14:00:25
+Directory : c:\Users\yawai\OneDrive\Документы\frontend.next-device
+Total : 80 files,  12658 codes, 3 comments, 648 blanks, all 13309 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JSON               |          4 |      7,565 |          0 |          3 |      7,568 |
+| TypeScript JSX     |         60 |      4,555 |          1 |        570 |      5,126 |
+| TypeScript         |         11 |        431 |          0 |         44 |        475 |
+| CSS                |          1 |         46 |          0 |         12 |         58 |
+| JSON with Comments |          1 |         26 |          0 |          1 |         27 |
+| Markdown           |          1 |         23 |          0 |         14 |         37 |
+| JavaScript         |          2 |         12 |          2 |          4 |         18 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                  | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                     |         80 |     12,658 |          3 |        648 |     13,309 |
+| . (Files)                                                                                             |          9 |      7,708 |          2 |         24 |      7,734 |
+| app                                                                                                   |         17 |      1,523 |          0 |        187 |      1,710 |
+| app (Files)                                                                                           |          3 |        172 |          0 |         26 |        198 |
+| app\about                                                                                             |          1 |         45 |          0 |          0 |         45 |
+| app\auth                                                                                              |          1 |        105 |          0 |         14 |        119 |
+| app\brands                                                                                            |          3 |        221 |          0 |         32 |        253 |
+| app\brands (Files)                                                                                    |          1 |         48 |          0 |          8 |         56 |
+| app\brands\[name]                                                                                     |          2 |        173 |          0 |         24 |        197 |
+| app\brands\[name] (Files)                                                                             |          1 |        114 |          0 |         14 |        128 |
+| app\brands\[name]\category                                                                            |          1 |         59 |          0 |         10 |         69 |
+| app\brands\[name]\category\[category]                                                                 |          1 |         59 |          0 |         10 |         69 |
+| app\catalog                                                                                           |          2 |        160 |          0 |         25 |        185 |
+| app\catalog (Files)                                                                                   |          1 |         94 |          0 |         16 |        110 |
+| app\catalog\[category]                                                                                |          1 |         66 |          0 |          9 |         75 |
+| app\error                                                                                             |          1 |         47 |          0 |          9 |         56 |
+| app\order                                                                                             |          1 |        130 |          0 |         11 |        141 |
+| app\privacy                                                                                           |          1 |         72 |          0 |          3 |         75 |
+| app\product                                                                                           |          1 |        113 |          0 |         17 |        130 |
+| app\product\[searchName]                                                                              |          1 |        113 |          0 |         17 |        130 |
+| app\profile                                                                                           |          1 |        281 |          0 |         27 |        308 |
+| app\search                                                                                            |          1 |        122 |          0 |         12 |        134 |
+| app\search\[query]                                                                                    |          1 |        122 |          0 |         12 |        134 |
+| app\success                                                                                           |          1 |         55 |          0 |         11 |         66 |
+| components                                                                                            |         48 |      3,173 |          1 |        398 |      3,572 |
+| components\shared                                                                                     |         32 |      2,189 |          1 |        265 |      2,455 |
+| components\types                                                                                      |          2 |         65 |          0 |          3 |         68 |
+| components\ui                                                                                         |         14 |        919 |          0 |        130 |      1,049 |
+| lib                                                                                                   |          1 |         20 |          0 |          5 |         25 |
+| store                                                                                                 |          5 |        234 |          0 |         34 |        268 |
++-------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                                              | language           | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\.eslintrc.json                                 | JSON               |          3 |          0 |          1 |          4 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\README.md                                      | Markdown           |         23 |          0 |         14 |         37 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\about\page.tsx                             | TypeScript JSX     |         45 |          0 |          0 |         45 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\auth\page.tsx                              | TypeScript JSX     |        105 |          0 |         14 |        119 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\brands\[name]\category\[category]\page.tsx | TypeScript JSX     |         59 |          0 |         10 |         69 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\brands\[name]\page.tsx                     | TypeScript JSX     |        114 |          0 |         14 |        128 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\brands\page.tsx                            | TypeScript JSX     |         48 |          0 |          8 |         56 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\catalog\[category]\page.tsx                | TypeScript JSX     |         66 |          0 |          9 |         75 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\catalog\page.tsx                           | TypeScript JSX     |         94 |          0 |         16 |        110 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\error\page.tsx                             | TypeScript JSX     |         47 |          0 |          9 |         56 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\globals.css                                | CSS                |         46 |          0 |         12 |         58 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\layout.tsx                                 | TypeScript JSX     |         43 |          0 |          3 |         46 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\order\page.tsx                             | TypeScript JSX     |        130 |          0 |         11 |        141 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\page.tsx                                   | TypeScript JSX     |         83 |          0 |         11 |         94 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\privacy\page.tsx                           | TypeScript JSX     |         72 |          0 |          3 |         75 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\product\[searchName]\page.tsx              | TypeScript JSX     |        113 |          0 |         17 |        130 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\profile\page.tsx                           | TypeScript JSX     |        281 |          0 |         27 |        308 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\search\[query]\page.tsx                    | TypeScript JSX     |        122 |          0 |         12 |        134 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\app\success\page.tsx                           | TypeScript JSX     |         55 |          0 |         11 |         66 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components.json                                | JSON               |         17 |          0 |          0 |         17 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\banner_carousel.tsx          | TypeScript JSX     |         43 |          0 |          8 |         51 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\breadCrumb.tsx               | TypeScript JSX     |         72 |          0 |         10 |         82 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\card.tsx                     | TypeScript JSX     |         19 |          0 |          2 |         21 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\cartDrawer.tsx               | TypeScript JSX     |         53 |          0 |          5 |         58 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\cartItem.tsx                 | TypeScript JSX     |        107 |          0 |         10 |        117 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\catalog_devices.tsx          | TypeScript JSX     |         49 |          0 |          6 |         55 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\categories.tsx               | TypeScript JSX     |         29 |          0 |          4 |         33 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\categoryCard.tsx             | TypeScript JSX     |         28 |          0 |          3 |         31 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\checkbox_filters_group.tsx   | TypeScript JSX     |         83 |          0 |         11 |         94 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\container.tsx                | TypeScript JSX     |          8 |          0 |          2 |         10 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\favoriteDrawer.tsx           | TypeScript JSX     |         31 |          0 |          3 |         34 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\favoriteItem.tsx             | TypeScript JSX     |         89 |          0 |         10 |         99 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\filter_checkbox.tsx          | TypeScript JSX     |         36 |          0 |          2 |         38 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\filters.tsx                  | TypeScript JSX     |        225 |          0 |         24 |        249 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\footer.tsx                   | TypeScript JSX     |         34 |          0 |          4 |         38 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\header.tsx                   | TypeScript JSX     |        121 |          0 |         19 |        140 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\index.ts                     | TypeScript         |         19 |          0 |          0 |         19 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\laptopFilters.tsx            | TypeScript JSX     |        225 |          0 |         23 |        248 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\productDetails.tsx           | TypeScript JSX     |         44 |          0 |          4 |         48 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\productReviews.tsx           | TypeScript JSX     |         97 |          0 |         14 |        111 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\product_card.tsx             | TypeScript JSX     |         95 |          0 |         11 |        106 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\product_carousel.tsx         | TypeScript JSX     |         81 |          0 |         11 |         92 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\products_group_list.tsx      | TypeScript JSX     |         65 |          0 |          7 |         72 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\range_slider.tsx             | TypeScript JSX     |         61 |          0 |          8 |         69 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\ratingDistribution.tsx       | TypeScript JSX     |         42 |          1 |          8 |         51 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\reviewForm.tsx               | TypeScript JSX     |        136 |          0 |         16 |        152 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\search_input.tsx             | TypeScript JSX     |        167 |          0 |         17 |        184 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\skeletonCard.tsx             | TypeScript JSX     |         17 |          0 |          2 |         19 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\sort_popup.tsx               | TypeScript JSX     |         15 |          0 |          2 |         17 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\stipeButton.tsx              | TypeScript JSX     |         51 |          0 |         12 |         63 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\title.tsx                    | TypeScript JSX     |         31 |          0 |          5 |         36 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\shared\top_bar.tsx                  | TypeScript JSX     |         16 |          0 |          2 |         18 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\types\productInterface.ts           | TypeScript         |         47 |          0 |          0 |         47 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\types\userInterface.ts              | TypeScript         |         18 |          0 |          3 |         21 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\ui\button.tsx                       | TypeScript JSX     |         48 |          0 |          6 |         54 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\ui\card.tsx                         | TypeScript JSX     |         71 |          0 |          9 |         80 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\ui\carousel.tsx                     | TypeScript JSX     |        232 |          0 |         31 |        263 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\ui\checkbox.tsx                     | TypeScript JSX     |         23 |          0 |          4 |         27 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\ui\dialog.tsx                       | TypeScript JSX     |        109 |          0 |         14 |        123 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\ui\drawer.tsx                       | TypeScript JSX     |        105 |          0 |         14 |        119 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\ui\index.ts                         | TypeScript         |         11 |          0 |          0 |         11 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\ui\input.tsx                        | TypeScript JSX     |         21 |          0 |          5 |         26 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\ui\popover.tsx                      | TypeScript JSX     |         25 |          0 |          7 |         32 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\ui\select.tsx                       | TypeScript JSX     |        146 |          0 |         15 |        161 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\ui\skeleton.tsx                     | TypeScript JSX     |         13 |          0 |          3 |         16 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\ui\slider.tsx                       | TypeScript JSX     |         24 |          0 |          5 |         29 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\ui\toggle-group.tsx                 | TypeScript JSX     |         52 |          0 |         10 |         62 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\components\ui\toggle.tsx                       | TypeScript JSX     |         39 |          0 |          7 |         46 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\lib\utils.ts                                   | TypeScript         |         20 |          0 |          5 |         25 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\next.config.mjs                                | JavaScript         |          6 |          1 |          2 |          9 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\package-lock.json                              | JSON               |      7,481 |          0 |          1 |      7,482 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\package.json                                   | JSON               |         64 |          0 |          1 |         65 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\postcss.config.mjs                             | JavaScript         |          6 |          1 |          2 |          9 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\store\authStore.ts                             | TypeScript         |         11 |          0 |          2 |         13 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\store\breadCrumbStore.ts                       | TypeScript         |         50 |          0 |          5 |         55 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\store\cartStore.ts                             | TypeScript         |        102 |          0 |         18 |        120 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\store\favoriteStore.ts                         | TypeScript         |         34 |          0 |          3 |         37 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\store\storeBrand.ts                            | TypeScript         |         37 |          0 |          6 |         43 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\tailwind.config.ts                             | TypeScript         |         82 |          0 |          2 |         84 |
+| c:\Users\yawai\OneDrive\Документы\frontend.next-device\tsconfig.json                                  | JSON with Comments |         26 |          0 |          1 |         27 |
+| Total                                                                                                 |                    |     12,658 |          3 |        648 |     13,309 |
++-------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+

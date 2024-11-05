@@ -8,6 +8,7 @@ import { Heart } from 'lucide-react';
 import Image from 'next/image';
 import { useFavoritesStore } from '@/store/favoriteStore';
 import { useCartStore } from '@/store/cartStore';
+import { toast } from 'react-toastify';
 
 interface Props {
     id: number;
@@ -42,11 +43,13 @@ export const ProductCard: React.FC<Props> = ({
             removeFavorite(id);
         } else {
             addFavorite(id);
+            toast.info('Товар добавлен в избранное')
         }
     };
 
     const handleAddToCart = () => {
         addItem(id, 1, price - discountPrice);
+        toast.info('Товар добавлен в корзину')
     };
 
     return (

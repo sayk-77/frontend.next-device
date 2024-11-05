@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/shared";
-import { Footer } from "@/components/shared";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Header, Footer } from "@/components/shared";
 
 const nunito = Nunito({
   subsets: ["cyrillic"],
@@ -30,6 +31,15 @@ export default function RootLayout({
           <main className="flex-grow">{children}</main>
           <Footer />
         </div>
+        <ToastContainer
+          position="top-right"
+          autoClose={2500}
+          hideProgressBar
+          closeOnClick
+          pauseOnHover
+          draggable
+          theme="colored"
+        />
       </body>
     </html>
   );

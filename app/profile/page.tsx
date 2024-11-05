@@ -2,7 +2,10 @@
 
 import { Button } from "@/components/ui";
 import axios from 'axios';
+import { Delete, Trash2 } from "lucide-react";
+import { headers } from "next/headers";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
@@ -14,12 +17,68 @@ const orderStatusDictionary = {
     "canceled": "Отменен",
 };
 
+const saveUserInfo = async (userInfo: UserInfo) => {
+    try {
+    console.log(userInfo)
+        const response = await axios.put(`${API_URL}/user/update`, 
+            {
+                firstName: userInfo.firstName,
+                lastName: userInfo.lastName,
+                email: userInfo.email
+            },{
+                headers: {
+                    Authorization: `Bearer ${token}`
+            }})
+        toast.success(response.data) 
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const changePassword = async (oldPassword: string, newPassword: string) => {
+    try {
+        const response = await axios.put(`${API_URL}/user/password`,
+            {
+                oldPassword: oldPassword,
+                newPassword: newPassword
+            },{
+                headers: {
+                    Authorization: `Bearer ${token}`
+            }})
+        toast.success(response.data)
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const addNewAddress = async (newAddress: Address) => {
+    try {
+        const response = await axios.post(`${API_URL}/user/address`, 
+            {
+                country: newAddress.country,
+                city: newAddress.city,
+                street: newAddress.street,
+                postalCode: newAddress.postalCode
+            },{
+                headers: {
+                    Authorization: `Bearer ${token}`
+            }})
+        toast.success(response.data)
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 export default function ProfilePage() {
     const [selectedSection, setSelectedSection] = useState<'info' | 'addresses' | 'orders'>('info');
     const [showEditInfoModal, setShowEditInfoModal] = useState(false);
     const [showAddAddressModal, setShowAddAddressModal] = useState(false);
     const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
-    const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+    const [userInfo, setUserInfo] = useState<UserInfo>({
+        firstName: '',
+        lastName: '',
+        email: ''
+    });
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [orders, setOrders] = useState<Order[]>([]);
 
@@ -40,7 +99,21 @@ export default function ProfilePage() {
     const [passwordError, setPasswordError] = useState("");
     const [oldPasswordError, setOldPasswordError] = useState("");
     const [formErrors, setFormErrors] = useState({ firstName: "", lastName: "", email: "" });
-
+    
+    const deleteAddress = async (id: number) => {
+        try {
+            const response = await axios.delete(`${API_URL}/user/address/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setAddresses(addresses.filter(addr => addr.id !== id));
+            toast.success(response.data)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -106,6 +179,7 @@ export default function ProfilePage() {
 
     const handleSaveInfo = () => {
         if (validateForm() && editableUserInfo) {
+            saveUserInfo(editableUserInfo)
             setUserInfo(editableUserInfo);
             setShowEditInfoModal(false);
         }
@@ -113,6 +187,7 @@ export default function ProfilePage() {
 
     const handleSaveAddress = () => {
         if (newAddress.country && newAddress.city && newAddress.street && newAddress.postalCode) {
+            addNewAddress(newAddress)
             setAddresses([...addresses, { ...newAddress, id: addresses.length + 1 }]);
             setShowAddAddressModal(false);
             setNewAddress({ id: 0, country: '', city: '', street: '', postalCode: '' });
@@ -121,6 +196,7 @@ export default function ProfilePage() {
 
     const handleSavePassword = () => {
         if (validatePassword()) {
+            changePassword(oldPassword, newPassword)    
             setShowChangePasswordModal(false);
             setOldPassword("");
             setNewPassword("");
@@ -165,13 +241,16 @@ export default function ProfilePage() {
                     {selectedSection === 'addresses' && (
                         <div className="mb-6">
                             <h3 className="text-xl font-semibold mb-2">Мои адреса</h3>
-                            <div className="space-y-2">
-                                {addresses.map(addr => (
-                                    <div key={addr.id} className="border p-4 rounded-md shadow-sm">
+                            {addresses.map(addr => (
+                                <div key={addr.id} className="border p-4 mt-[10px] rounded-md shadow-sm flex justify-between items-center">
+                                    <span>
                                         {`${addr.country}, г.${addr.city}, ул.${addr.street}, ${addr.postalCode}`}
-                                    </div>
-                                ))}
-                            </div>
+                                    </span>
+                                    <button onClick={() => deleteAddress(addr.id)}>
+                                        <Trash2 size={16} />
+                                    </button>
+                                </div>
+                            ))}
                             <Button onClick={() => setShowAddAddressModal(true)} variant="link">
                                 Добавить адрес
                             </Button>
@@ -277,24 +356,28 @@ export default function ProfilePage() {
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white rounded-lg p-6">
                         <h4 className="text-lg font-semibold mb-4">Изменить пароль</h4>
-                        <input
-                            type="password"
-                            placeholder="Текущий пароль"
-                            value={oldPassword}
-                            onChange={e => setOldPassword(e.target.value)}
-                            className={`border w-full p-2 mb-2 rounded ${oldPasswordError ? 'border-red-500' : ''}`}
-                        />
-                        <input
-                            type="password"
-                            placeholder="Новый пароль"
-                            value={newPassword}
-                            onChange={e => setNewPassword(e.target.value)}
-                            className={`border w-full p-2 mb-2 rounded ${passwordError ? 'border-red-500' : ''}`}
-                        />
-                        <div className="flex justify-between">
-                            <Button onClick={handleSavePassword}>Сохранить</Button>
-                            <Button onClick={() => setShowChangePasswordModal(false)} variant="outline">Отменить</Button>
-                        </div>
+                        <form onSubmit={handleSavePassword}>
+                            <input
+                                type="password"
+                                placeholder="Текущий пароль"
+                                value={oldPassword}
+                                autoComplete="current-password"
+                                onChange={e => setOldPassword(e.target.value)}
+                                className={`border w-full p-2 mb-2 rounded ${oldPasswordError ? 'border-red-500' : ''}`}
+                            />
+                            <input
+                                type="password"
+                                placeholder="Новый пароль"
+                                autoComplete="new-password"
+                                value={newPassword}
+                                onChange={e => setNewPassword(e.target.value)}
+                                className={`border w-full p-2 mb-2 rounded ${passwordError ? 'border-red-500' : ''}`}
+                            />
+                            <div className="flex justify-between mt-4">
+                                <Button type="submit">Сохранить</Button>
+                                <Button onClick={() => setShowChangePasswordModal(false)} variant="outline">Отменить</Button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}
