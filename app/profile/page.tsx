@@ -1,5 +1,6 @@
 'use client';
 
+import OrderModal from "@/components/shared/orderModal";
 import { Button } from "@/components/ui";
 import axios from 'axios';
 import { Delete, Trash2 } from "lucide-react";
@@ -99,6 +100,8 @@ export default function ProfilePage() {
     const [passwordError, setPasswordError] = useState("");
     const [oldPasswordError, setOldPasswordError] = useState("");
     const [formErrors, setFormErrors] = useState({ firstName: "", lastName: "", email: "" });
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
     
     const deleteAddress = async (id: number) => {
         try {
@@ -139,6 +142,7 @@ export default function ProfilePage() {
                 setOrders(user.orders.map((order: any) => ({
                     id: order.id,
                     createdAt: order.createdAt,
+                    totalPrice: order.totalPrice,
                     status: order.status,
                 })));
             } catch (error) {
@@ -202,9 +206,19 @@ export default function ProfilePage() {
             setNewPassword("");
         }
     };
+    
+    const openModal = (orderId: number) => {
+        setSelectedOrderId(orderId);
+        setModalOpen(true);
+      };
+    
+      const closeModal = () => {
+        setModalOpen(false);
+        setSelectedOrderId(null);
+      };
 
     return (
-        <div className="flex flex-col items-center min-h-screen">
+        <div className="flex flex-col items-center">
             <div className="bg-white p-8 mt-10 rounded-lg shadow-md w-full max-w-2xl">
                 <h2 className="text-2xl font-semibold text-center mb-6">Профиль</h2>
 
@@ -265,15 +279,30 @@ export default function ProfilePage() {
                                 const formattedDate = new Date(order.createdAt).toISOString().split('T')[0];
                             
                                 return (
-                                    <li key={order.id} className="border p-4 rounded-md shadow-sm">
-                                        <p><span className="font-medium">Заказ №:</span> {order.id}</p>
-                                        <p><span className="font-medium">Дата:</span> {formattedDate}</p>
-                                        <p><span className="font-medium">Статус:</span> {orderStatusDictionary[order.status] || order.status}</p>
+                                    <li key={order.id} className="border p-6 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300 ease-in-out">
+                                      <div className="flex justify-between items-center mb-2">
+                                        <h3 className="text-lg font-semibold text-gray-700">Заказ № {order.id}</h3>
+                                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.status === 'delivered' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                                          {orderStatusDictionary[order.status] || order.status}
+                                        </span>
+                                      </div>
+                                      <div className="text-gray-500 mb-2">
+                                        <p><span className="font-medium text-gray-700">Дата:</span> {formattedDate}</p>
+                                        <p><span className="font-medium text-gray-700">Оплачено:</span> {order.totalPrice} р.</p>
+                                      </div>
+                                      <div className="flex justify-end mt-4">
+                                      <Button variant="link" onClick={() => openModal(order.id)}>
+                                          Подробней
+                                      </Button>
+                                      </div>
                                     </li>
                                 );
                             })}
                             </ul>
                         </div>
+                    )}
+                    {isModalOpen && selectedOrderId && (
+                        <OrderModal orderId={selectedOrderId} onClose={closeModal} />
                     )}
                 </div>
             </div>

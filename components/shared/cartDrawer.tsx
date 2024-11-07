@@ -19,9 +19,9 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
         <div 
             className={`fixed top-0 z-40 right-0 h-full bg-white transition-all duration-500 ease-in-out transform ${isOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'} shadow-lg`}
         >
-            <div className="p-4">
+            <div className="p-4 overflow-y-auto max-h-[99vh] scrollbar-hide">
                 <div className='flex items-center gap-[15px] justify-between'>
-                    <h2 className="text-lg font-bold">Корзина</h2>
+                    <h2 className="text-lg font-bold">Корзина ({totalItems})</h2>
                     {items.length > 0 && (
                         <div className='flex gap-[10px]'>
                             <Button variant="ghost" onClick={clearCart}>Очистить корзину</Button>

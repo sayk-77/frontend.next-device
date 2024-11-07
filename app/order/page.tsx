@@ -25,7 +25,7 @@ const OrderPage = () => {
 
     const fetchUserData = async () => {
       if (!storedToken) return;
-
+      
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
           headers: { Authorization: `Bearer ${storedToken}` },
@@ -79,7 +79,6 @@ const OrderPage = () => {
               <p className="text-center text-gray-500 mt-4">Корзина пуста</p>
             )}
           </div>
-          <h3 className="font-bold text-end text-[26px]">Итого: {totalPrice} Р</h3>
           {items.length > 0 && !token && (
             <p className="text-[20px] mb-6">
               Чтобы оформить заказ, вам необходимо
@@ -129,11 +128,14 @@ const OrderPage = () => {
               {hasError && <p className="text-red-500">Пожалуйста, выберите адрес доставки</p>}
             </div>
           )}
-          <div className="flex gap-[10px] items-center">
-            <Button variant="outline" onClick={handleCheckout}>
-              {selectedAddress ? <CheckoutButton orderItems={items} totalPrice={totalPrice} /> : 'Оплатить'}
-            </Button>
+          <div className="flex justify-between">
             <p>Перед оплатой внимательно проверьте свои данные!</p>
+            <div className='flex flex-col items-end'>
+              <p className="font-medium text-end text-[26px]">Итого: {totalPrice} Р</p>
+              <Button variant="outline" onClick={handleCheckout}>
+                {selectedAddress ? <CheckoutButton orderItems={items} totalPrice={totalPrice} address={Number(selectedAddress)} /> : 'Оплатить'}
+              </Button>
+            </div>
           </div>
         </div>
       </div>

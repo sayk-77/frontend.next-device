@@ -12,9 +12,15 @@ interface CartItem {
     price: number;
 }
 
+interface Props {
+    orderItems: CartItem[];
+    totalPrice: number
+    address: number
+}
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const CheckoutButton = ({ orderItems, totalPrice }: { orderItems: CartItem[], totalPrice: number }) => {
+export const CheckoutButton:React.FC<Props> = ({orderItems, totalPrice, address}) => {
     const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
@@ -40,6 +46,7 @@ export const CheckoutButton = ({ orderItems, totalPrice }: { orderItems: CartIte
                 {
                     orderItems: orderItems,
                     totalPrice: totalPrice,
+                    address: address,
                 },
                 {
                     headers: {

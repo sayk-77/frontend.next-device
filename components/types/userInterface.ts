@@ -17,5 +17,6 @@ type OrderStatus = 'pending' | 'shipped' | 'delivered' | 'canceled';
 interface Order {
     id: number;
     createdAt: string;
+    totalPrice: number
     status: OrderStatus;
 }
