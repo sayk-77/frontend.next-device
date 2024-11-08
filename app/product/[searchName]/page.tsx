@@ -45,35 +45,7 @@ export default function ProductPage({ params: { searchName } }: { params: { sear
         { label: product.name, href: `/product/${product.searchName}` },
     ];
     
-    const reviews = [
-        {
-            name: 'Александр',
-            age: 29,
-            rating: 5,
-            images: [''],
-            pros: ['Отличная камера.', 'Высокая производительность.', 'Яркий AMOLED экран.'],
-            cons: ['Высокая цена.', 'Нет беспроводной зарядки.'],
-            comment: 'Использую Xiaomi 14 Ultra и очень доволен. Камера просто супер!'
-        },
-        {
-            name: 'Мария',
-            age: 25,
-            rating: 5,
-            images: [''],
-            pros: ['Хорошая автономность.', 'Удобный интерфейс.'],
-            cons: ['Проблемы с обновлениями.'],
-            comment: 'В общем, отличный телефон. Батареи хватает на день, но иногда возникают сбои в обновлениях.'
-        },
-        {
-            name: 'Иван',
-            age: 32,
-            rating: 5,
-            images: [''],
-            pros: ['Хорошая производительность.', 'Приятный дизайн.'],
-            cons: ['Плохая поддержка.', 'Не хватает обновлений.'],
-            comment: 'Телефон неплохой, но ожидал большего. Не хватает регулярных обновлений.'
-        }
-    ];
+    const reviews: any = []
 
     return (
         <div className="p-6">
@@ -99,7 +71,7 @@ export default function ProductPage({ params: { searchName } }: { params: { sear
 
                             <div className="flex gap-[30px] items-center justify-between pt-[20px]">
                                 <div className="flex flex-col relative">
-                                    <span className="text-end text-[18px] line-through absolute top-[-20px] right-0">{product.price}</span>
+                                    {product.discountPrice > 0 && (<span className="text-end text-[18px] line-through absolute top-[-20px] right-0">{product.price}</span>)}
                                     <span className="text-2xl">Цена: <strong>{product.price - product.discountPrice}</strong></span>
                                 </div>
                                 <div className="flex items-center gap-5">

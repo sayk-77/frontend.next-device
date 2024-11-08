@@ -53,12 +53,14 @@ export const ProductCard: React.FC<Props> = ({
     };
 
     return (
-        <div className={`${className} flex relative flex-col border min-w-[280px] max-w-[280px] w-full h-[470px] justify-between p-3 rounded-lg overflow-hidden`}>
+        <div className={`${className} flex relative flex-col min-w-[280px] max-w-[280px] w-full h-[470px] justify-between p-3 rounded-lg overflow-hidden`}>
             <Link href={`/product/${searchName}`}>
                 <div className="flex justify-center items-center h-[200px] mb-3 mt-3">
-                    <p className='absolute top-[10px] right-[5px] bg-red-600 text-white px-2 py-1 rounded-full text-sm font-bold shadow-md'>
-                        Скидка
-                    </p>
+                    {discountPrice > 0 && (
+                        <p className='absolute top-[10px] right-[5px] bg-red-600 text-white px-2 py-1 rounded-full text-sm font-bold shadow-md'>
+                            Скидка
+                        </p>)
+                    }
                     <Image
                         width={200}
                         height={200}
@@ -76,11 +78,13 @@ export const ProductCard: React.FC<Props> = ({
                 </p>
 
                 <div className='relative flex flex-col'>
-                    <span className='text-gray-500 line-through'>
-                        {price}
-                    </span>
+                   {discountPrice > 0 && (
+                       <span className='text-gray-500 line-through'>
+                          {price}
+                       </span>)
+                    }
                     <span className='text-[18px]'>
-                        <b>{price - discountPrice} Р</b>
+                        <b>{price - discountPrice} ₽ </b>
                     </span>
                 </div>
 
