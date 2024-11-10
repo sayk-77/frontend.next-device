@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
+'use client'
+
+import React, { useState, useEffect } from 'react';
 import RatingDistribution from './ratingDistribution';
-import Image from 'next/image';
 import { ReviewForm } from './reviewForm';
 import { Button } from '../ui';
+import axios from 'axios';
+import { PanelTopCloseIcon, SquareX, X } from 'lucide-react';
 
-interface ReviewProps {
-    reviews?: {
-        name: string;
-        age: number;
-        rating: number;
-        pros: string;
-        cons: string;
-        images: string[];
-        comment: string;
+interface Review {
+    id: number;
+    name: string;
+    age: number;
+    rating: number;
+    pros: string;
+    cons: string;
+    images: {
+        id: number;
+        imageUrl: string;
     }[];
+    comment: string;
 }
 
 interface ReviewInput {
@@ -26,11 +31,47 @@ interface ReviewInput {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const Review: React.FC<ReviewProps> = ({ reviews }) => {
+interface ReviewProps {
+    productId: number;
+}
+
+const Review: React.FC<ReviewProps> = ({ productId }) => {
+    const [reviews, setReviews] = useState<Review[] | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+
+    const openImageModal = (imageUrl: string) => {
+        setSelectedImage(imageUrl);
+        setIsImageModalOpen(true);
+    };
+
+    const closeImageModal = () => {
+        setIsImageModalOpen(false);
+        setSelectedImage(null);
+    };
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const response = await axios.get(`${API_URL}/review/product/${productId}`);
+                setReviews(response.data);
+            } catch (err) {
+                setError('Не удалось загрузить отзывы');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchReviews();
+    }, [productId]);
 
     const handleReviewSubmit = (reviewData: ReviewInput) => {
         console.log('Отправленный отзыв:', reviewData);
@@ -39,17 +80,21 @@ const Review: React.FC<ReviewProps> = ({ reviews }) => {
     return (
         <div className="flex pt-10 pb-10 px-5 rounded-lg shadow-lg">
             <div className="flex-none w-1/3">
-                <RatingDistribution reviews={reviews} />
+                <RatingDistribution reviews={reviews || []} />
                 <Button onClick={openModal}>Оставить отзыв</Button>
             </div>
 
             <div className="flex-1 pl-5">
                 <h3 className="text-3xl font-bold mb-6 text-gray-800">Отзывы клиентов</h3>
-                
-                {reviews && reviews.length > 0 ? (
-                    reviews.map((review, index) => (
+
+                {loading ? (
+                    <p className="text-gray-700">Загрузка...</p>
+                ) : error ? (
+                    <p className="text-red-500">{error}</p>
+                ) : reviews && reviews.length > 0 ? (
+                    reviews.map((review) => (
                         <div
-                            key={index}
+                            key={review.id}
                             className="flex mb-8 p-6 bg-white border rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
                         >
                             <div className="flex-1">
@@ -65,20 +110,26 @@ const Review: React.FC<ReviewProps> = ({ reviews }) => {
                                 <div className="font-bold text-lg text-gray-800 mb-2">Комментарий:</div>
                                 <p className="text-gray-700 italic">{review.comment}</p>
                                 
-                                <div className="font-bold text-lg text-gray-800 mb-2">Фото:</div>
-                                <div className="flex flex-wrap mt-4">
-                                    {Array.from({ length: 4 }).map((_, idx) => (
-                                        <div key={idx} className="relative h-24 w-24 mr-2 mb-2">
-                                            <Image
-                                                src={`${API_URL}/images/product/placeholder.png`}
-                                                alt={`Review image ${idx + 1}`}
-                                                layout="fill"
-                                                objectFit="cover"
-                                                className="rounded-lg"
-                                            />
+                                {review.images && review.images.length > 0 && (
+                                    <>
+                                        <div className="font-bold text-lg text-gray-800 mb-2">Фото:</div>
+                                        <div className="flex flex-wrap mt-4">
+                                            {review.images.map((image, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className="relative h-24 w-24 mr-2 mb-2 cursor-pointer"
+                                                    onClick={() => openImageModal(image.imageUrl)}
+                                                >
+                                                    <img
+                                                      src={`${API_URL}/images/review/${image.imageUrl}`}
+                                                      loading="lazy"
+                                                      className="w-full h-full object-scale-down rounded-xl"
+                                                    />
+                                                </div>
+                                            ))}
                                         </div>
-                                    ))}
-                                </div>
+                                    </>
+                                )}
                             </div>
                         </div>
                     ))
@@ -87,8 +138,26 @@ const Review: React.FC<ReviewProps> = ({ reviews }) => {
                 )}
             </div>
 
-            {isModalOpen && (
-                <ReviewForm onSubmit={handleReviewSubmit} onClose={closeModal} />
+            {isImageModalOpen && selectedImage && (
+                <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white p-4 rounded-lg relative mx-4 my-4">
+                        <img
+                            src={`${API_URL}/images/review/${selectedImage}`}
+                            alt="Увеличенное фото"
+                            className="p-[15px] max-w-2xl max-h-screen object-contain"
+                        />
+                        <button
+                            onClick={closeImageModal}
+                            className="absolute top-1 right-1 text-black rounded-full p-2"
+                        >
+                            <X/>
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {isModalOpen && !isImageModalOpen && (
+                <ReviewForm onSubmit={handleReviewSubmit} onClose={closeModal} productId={productId}/>
             )}
         </div>
     );

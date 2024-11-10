@@ -32,7 +32,7 @@ const RatingDistribution: React.FC<RatingDistributionProps> = ({ reviews }) => {
 
             {totalReviews > 0 ? (
                 <div className="w-full">
-                    {ratingCounts.map((count, index) => (
+                    {ratingCounts.slice().reverse().map((count, index) => (
                         <div className="flex items-center mb-1" key={index}>
                             <span className="text-gray-600 text-sm mr-2">{5 - index}★</span>
                             <div className="h-2 bg-gray-200 rounded-full w-full">

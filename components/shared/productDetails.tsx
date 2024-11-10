@@ -35,7 +35,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ details }) => {
           <p className="flex-none text-lg text-gray-800">{label}:</p>
           <div className="flex-grow flex items-center relative ml-2">
             <div className="flex-grow border-b border-dotted border-gray-400 mr-2" />
-            <p className="relative z-10 text-right whitespace-nowrap">
+            <p className="relative text-right whitespace-nowrap">
               {value ? value : <Skeleton className="w-1/2" />}
             </p>
           </div>

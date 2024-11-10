@@ -3,22 +3,22 @@
 import { Container, ProductCarousel, Title } from "@/components/shared";
 import Breadcrumbs from "@/components/shared/breadCrumb";
 import ProductDetails from "@/components/shared/productDetails";
-import Review from "@/components/shared/productReviews";
-import { Button, Skeleton, ToggleGroup, ToggleGroupItem } from "@/components/ui";
+import { Button, Skeleton } from "@/components/ui";
 import useBrandStore from "@/store/storeBrand";
 import axios from "axios";
-import { Database, Palette, Star, ShoppingBasket, Heart, Shield } from "lucide-react";
+import { Star, ShoppingBasket, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
+import dynamic from 'next/dynamic';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const rating = [1, 2, 3, 4, 5];
+const Review = dynamic(() => import('@/components/shared/productReviews'), { ssr: false });
 
 export default function ProductPage({ params: { searchName } }: { params: { searchName: string } }) {
     const [product, setProduct] = useState<Product>({} as Product);
-
     const setBrandId = useBrandStore(state => state.setBrandId);
     const setBrandName = useBrandStore(state => state.setBrandName);
+    const [loading, setLoading] = useState(true);
 
     const handleBrandClick = (id: number, name: string) => {
         setBrandId(id);
@@ -34,8 +34,10 @@ export default function ProductPage({ params: { searchName } }: { params: { sear
                 console.log(response.data);
             } catch (err) {
                 console.log(err);
+            } finally {
+                setLoading(false); 
             }
-        }
+        };
         getProductById(searchName);
     }, [searchName]);
 
@@ -44,8 +46,16 @@ export default function ProductPage({ params: { searchName } }: { params: { sear
         { label: product.category?.title || 'Категория', href: `/brands/${product.brand?.name}/category/${product.category?.title}` },
         { label: product.name, href: `/product/${product.searchName}` },
     ];
-    
-    const reviews: any = []
+
+    if (loading) {
+        return (
+            <div className="p-6">
+                <Container>
+                    <Skeleton />
+                </Container>
+            </div>
+        );
+    }
 
     return (
         <div className="p-6">
@@ -91,10 +101,10 @@ export default function ProductPage({ params: { searchName } }: { params: { sear
                         Оснащенный высокопроизводительным чипом Snapdragon 8 Gen 3, он обеспечивает молниеносную скорость и отличную производительность. 
                         Уникальная система камер с разрешением 50+50+50 Мп позволяет делать невероятные фотографии в любых условиях, а поддержка ночного режима открывает новые горизонты для ночной съемки. 
                         Обладая экраном AMOLED с разрешением 3200x1440 и частотой обновления 120 Гц, вы сможете наслаждаться яркими и четкими изображениями в любых условиях освещения.
-                        </p>
+                    </p>
                 </div>
 
-                <Review reviews={reviews} />
+                {product.id && <Review productId={product.id} />}
             </Container>
         </div>
     );

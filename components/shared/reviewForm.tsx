@@ -1,11 +1,11 @@
-'use client';
-
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Input } from "@/components/ui";
+import axios from 'axios';
 
 interface ReviewFormProps {
     onSubmit: (review: ReviewInput) => void;
     onClose: () => void;
+    productId: number
 }
 
 interface ReviewInput {
@@ -16,7 +16,10 @@ interface ReviewInput {
     images: File[];
 }
 
-export const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onClose }) => {
+const API_URL = process.env.NEXT_PUBLIC_API_URL
+
+export const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onClose, productId }) => {
+    const [token, setToken] = useState<string | null>(null)
     const [reviewData, setReviewData] = useState<ReviewInput>({
         rating: 5,
         pros: '',
@@ -24,6 +27,13 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onClose }) => 
         comment: '',
         images: []
     });
+    
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            setToken(token)
+        }
+    }, [])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -47,9 +57,33 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onClose }) => 
         }));
     };
 
-    const handleSubmit = () => {
-        onSubmit(reviewData);
-        onClose();
+    const handleSubmit = async () => {
+        const formData = new FormData();
+        formData.append('rating', reviewData.rating.toString());
+        formData.append('pros', reviewData.pros);
+        formData.append('cons', reviewData.cons);
+        formData.append('comment', reviewData.comment);
+        formData.append('productId', productId.toString())
+    
+        reviewData.images.forEach((image, index) => {
+            formData.append(`images`, image);
+        });
+    
+        try {
+            const response = await axios.post(`${API_URL}/review`, formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+    
+            if (response.status === 200) {
+                onSubmit(reviewData);
+                onClose();
+            }
+        } catch (error) {
+            console.error('Ошибка при отправке отзыва:', error);
+        }
     };
 
     return (
@@ -66,6 +100,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onClose }) => 
                             max={5}
                             value={reviewData.rating}
                             onChange={handleChange}
+                            className="w-full h-[40px]" 
                         />
                     </div>
 
@@ -76,7 +111,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onClose }) => 
                             value={reviewData.pros}
                             onChange={handleChange}
                             rows={3}
-                            className="p-2 border rounded-md w-full focus:ring-0 focus:border-orange-500 focus:outline-none"
+                            className="p-2 border rounded-md w-full h-[80px] resize-none focus:ring-0 focus:border-orange-500 focus:outline-none" // Фиксированная высота и отключение изменения размера
                         />
                     </div>
 
@@ -87,7 +122,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onClose }) => 
                             value={reviewData.cons}
                             onChange={handleChange}
                             rows={3}
-                            className="p-2 border rounded-md w-full focus:ring-0 focus:border-orange-500 focus:outline-none"
+                            className="p-2 border rounded-md w-full h-[80px] resize-none focus:ring-0 focus:border-orange-500 focus:outline-none"
                         />
                     </div>
 
@@ -98,19 +133,12 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onClose }) => 
                             value={reviewData.comment}
                             onChange={handleChange}
                             rows={4}
-                            className="p-2 border rounded-md w-full focus:ring-0 focus:border-orange-500 focus:outline-none"
+                            className="p-2 border rounded-md w-full h-[100px] resize-none focus:ring-0 focus:border-orange-500 focus:outline-none"
                         />
                     </div>
 
                     <div>
                         <label className="block mb-2 text-sm font-medium">Добавить фото (до 5)</label>
-                        <input
-                            type="file"
-                            multiple
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            className="hidden"
-                        />
                         <label className="cursor-pointer inline-flex items-center px-4 py-2 text-orange-500 rounded-md hover:bg-orange-600 hover:text-white transition">
                             Загрузить изображения
                             <input
