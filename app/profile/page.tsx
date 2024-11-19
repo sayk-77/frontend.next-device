@@ -275,7 +275,7 @@ export default function ProfilePage() {
                         <div className="mb-6">
                             <h3 className="text-xl font-semibold mb-2">Мои заказы</h3>
                             <ul className="space-y-2">
-                            {orders.map(order => {
+                            {orders.length > 0 ? orders.map(order => {
                                 const formattedDate = new Date(order.createdAt).toISOString().split('T')[0];
                             
                                 return (
@@ -297,7 +297,7 @@ export default function ProfilePage() {
                                       </div>
                                     </li>
                                 );
-                            })}
+                            }) : (<div>У вас еще нет заказов</div>)}
                             </ul>
                         </div>
                     )}

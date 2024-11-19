@@ -31,7 +31,7 @@ export const AdminProduct = () => {
     }, [])
     
     return (
-        <Container className="flex flex-wrap gap-[30px] min-h-[calc(100vh-100px)]">
+        <Container className="flex flex-wrap gap-[30px] m-auto max-w-[1000px]">
             {products && products.length > 0 ? products.map((product) => (
               <ProductCard
                 key={product.id}
