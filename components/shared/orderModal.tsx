@@ -50,7 +50,7 @@ interface Order {
 interface OrderModalProps {
     orderId: number | null;
     onClose: () => void;
-    changeStatusOrder?: (orderId: number, status: string) => void
+    changeStatusOrder?: (orderId: number, status: OrderStatus) => void
     isAdmin?: boolean
 }
 
@@ -96,7 +96,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ orderId, onClose, isAdmin, chan
         if (response.status === 200) {
           toast.info('Статус заказа изменен')
           if (changeStatusOrder) {
-            changeStatusOrder(orderId, status)
+            changeStatusOrder(orderId, status as OrderStatus)
           }
           onClose()
         }
@@ -166,10 +166,10 @@ const OrderModal: React.FC<OrderModalProps> = ({ orderId, onClose, isAdmin, chan
           ) : null}
           {isAdmin && 
             (<div className='flex justify-end gap-[20px]'>
-              <Button variant='ghost' disabled={order?.status == 'delivered'} onClick={() => changeStatus(orderId, 'shipped')}>
+              <Button variant='ghost' disabled={order?.status == 'delivered'} onClick={() => changeStatus(orderId, 'shipped' as OrderStatus)}>
                 В доставке
               </Button>
-              <Button variant='link' disabled={order?.status == 'delivered'} onClick={() => changeStatus(orderId, 'delivered')}>
+              <Button variant='link' disabled={order?.status == 'delivered'} onClick={() => changeStatus(orderId, 'delivered' as OrderStatus)}>
                 Доставлен
               </Button>
             </div>

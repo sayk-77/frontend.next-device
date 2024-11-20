@@ -48,11 +48,11 @@ const EditProductPage = ({ params }: { params: { searchName: string } }) => {
         }
     }, [params.searchName]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, key?: string) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, key?: string) => {
         if (!product) return;
         
         const { name, value } = e.target;
-    
+        
         if (key) {
             setProduct(prevProduct => ({
                 ...prevProduct!,
@@ -69,7 +69,7 @@ const EditProductPage = ({ params }: { params: { searchName: string } }) => {
         }
     };
 
-    const saveProduct = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const saveProduct = async (e: React.MouseEvent<HTMLButtonElement>) => {
         if (!product) return;
         
         e.preventDefault()
@@ -110,7 +110,7 @@ const EditProductPage = ({ params }: { params: { searchName: string } }) => {
         return <div>Loading...</div>;
     }
     
-    const cancel = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const cancel = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         window.location.href = '/dashboard';
     }
@@ -312,10 +312,10 @@ const EditProductPage = ({ params }: { params: { searchName: string } }) => {
                 </div>
             </section>
                 <div className='flex justify-end'>
-                    <Button variant="link" onClick={(e: React.ChangeEvent<HTMLInputElement>) => saveProduct(e)}>
+                    <Button variant="link" onClick={(e: React.MouseEvent<HTMLButtonElement>) => saveProduct(e)}>
                         Сохранить
                     </Button>
-                    <Button variant="link" onClick={(e: React.ChangeEvent<HTMLInputElement>) => cancel(e)}>
+                    <Button variant="link" onClick={(e: React.MouseEvent<HTMLButtonElement>) => cancel(e)}>
                         Отменить
                     </Button>
                 </div>
