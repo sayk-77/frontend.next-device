@@ -98,6 +98,7 @@ const Review: React.FC<ReviewProps> = ({ productId }) => {
                             className="flex mb-8 p-6 bg-white border rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
                         >
                             <div className="flex-1">
+                                <div className="font-bold text-lg text-gray-800 mt-4 mb-2">Оценка: <span>{review.rating}/5</span></div>
                                 <h4 className="text-xl font-semibold text-gray-900 flex items-center mb-2">
                                     {review.name}
                                 </h4>

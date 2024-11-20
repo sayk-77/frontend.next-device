@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useCartStore } from '@/store/cartStore';
 
 interface SuccessProps {
   orderId: string | null;
@@ -12,6 +13,8 @@ const Success = ({ searchParams }: { searchParams: { order_id?: string; session_
   const orderId = typeof searchParams.order_id === 'string' ? searchParams.order_id : null;
   const sessionId = typeof searchParams.session_id === 'string' ? searchParams.session_id : null;
   const [token, setToken] = useState<string | null>(null);
+  
+  const { clearCart } = useCartStore();
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -43,6 +46,7 @@ const Success = ({ searchParams }: { searchParams: { order_id?: string; session_
               Authorization: `Bearer ${token}`,
             },
           });
+          clearCart()
           console.log('Payment confirmed:', response.data);
         } catch (error: any) {
           console.error('Error sending payment confirmation:', error.response ? error.response.data : error.message);

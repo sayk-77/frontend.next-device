@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Title } from './index';
 import { Button } from '../ui';
 import { Heart } from 'lucide-react';
@@ -23,7 +23,7 @@ interface Props {
 
 const API_URL_IMAGE_PRODUCT = process.env.NEXT_PUBLIC_API_URL_IMAGE_PRODUCT;
 
-export const ProductCard: React.FC<Props> = ({
+export const AdminEditProductCard: React.FC<Props> = ({
     className,
     imageUrl,
     name,
@@ -34,27 +34,11 @@ export const ProductCard: React.FC<Props> = ({
     discountPrice,
 }) => {
     const { favorites, addFavorite, removeFavorite } = useFavoritesStore();
-    const addItem = useCartStore(state => state.addItem);
 
-    const isFavorite = favorites.includes(id);
-
-    const handleFavoriteToggle = () => {
-        if (isFavorite) {
-            removeFavorite(id);
-        } else {
-            addFavorite(id);
-            toast.info('Товар добавлен в избранное')
-        }
-    };
-
-    const handleAddToCart = () => {
-        addItem(id, 1, price - discountPrice);
-        toast.info('Товар добавлен в корзину')
-    };
 
     return (
         <div className={`${className} flex relative flex-col min-w-[280px] max-w-[280px] w-full h-[470px] justify-between p-3 rounded-lg overflow-hidden`}>
-            <Link href={`/product/${searchName}`}>
+            <Link href={`/dashboard/product/${searchName}`}>
                 <div className="flex justify-center items-center h-[200px] mb-3 mt-3">
                     {discountPrice > 0 && (
                         <p className='absolute top-[10px] right-[5px] bg-red-600 text-white px-2 py-1 rounded-full text-sm font-bold shadow-md'>
@@ -86,23 +70,6 @@ export const ProductCard: React.FC<Props> = ({
                     <span className='text-[18px]'>
                         <b>{price - discountPrice} ₽ </b>
                     </span>
-                </div>
-
-                <div className='flex flex-row gap-3 mt-2'>
-                    <Button
-                        variant={isFavorite ? 'outline' : "secondary"}
-                        className="rounded-[10px] p-2"
-                        onClick={handleFavoriteToggle}
-                    >
-                        <Heart size={20} color={isFavorite ? "red" : 'gray'} />
-                    </Button>
-                    <Button 
-                        variant="secondary" 
-                        className='rounded-[10px] p-2 text-gray-500' 
-                        onClick={handleAddToCart} 
-                    >
-                        В корзину
-                    </Button>
                 </div>
             </div>
         </div>

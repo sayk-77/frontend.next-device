@@ -4,6 +4,10 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { ProductCard } from "./product_card"
 import { Container } from "./container";
+import Link from "next/link";
+import { Button } from "../ui";
+import { AdminEditProductCard } from "./adminProductEdit";
+import { Plus } from "lucide-react";
 
 interface Product {
     id: number;
@@ -31,19 +35,27 @@ export const AdminProduct = () => {
     }, [])
     
     return (
-        <Container className="flex flex-wrap gap-[30px] m-auto max-w-[1000px]">
-            {products && products.length > 0 ? products.map((product) => (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                imageUrl={product.image}
-                description={product.description}
-                discountPrice={product.discountPrice}
-                price={product.price}
-                searchName={product.searchName}
-              />
-            )) : (<div>Продуктов нет</div>)}
+        <Container className="m-auto max-w-[1000px]">
+             <div className="flex justify-between">
+                <p>Все товары</p>
+                <Link href='/dashboard/product/create'>
+                    <Plus/>
+                </Link>
+            </div>
+            <div className="flex flex-wrap gap-[30px]">
+                {products && products.length > 0 ? products.map((product) => (
+                    <AdminEditProductCard
+                        key={product.id}
+                        id={product.id}
+                        name={product.name}
+                        imageUrl={product.image}
+                        description={product.description}
+                        discountPrice={product.discountPrice}
+                        price={product.price}
+                        searchName={product.searchName}
+                    />
+                )) : (<div>Продуктов нет</div>)}
+            </div>
         </Container>
     )
 }

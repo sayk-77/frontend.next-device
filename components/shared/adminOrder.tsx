@@ -3,6 +3,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button } from "../ui";
+import OrderModal from "./orderModal";
+import { toast } from "react-toastify";
 
 const orderStatusDictionary = {
     "pending": "В ожидании",
@@ -15,6 +17,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 const AdminOrder: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([])
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+    const [selectedOrderId, setSelectedOrderIdOrderId] = useState<number | null>(null)
     
     useEffect(() => {
         const getOrder = async () => {
@@ -28,7 +32,21 @@ const AdminOrder: React.FC = () => {
     }, [])
 
     const openModal = (orderId: number) => {
-      console.log(`Открыть модалку для заказа ${orderId}`);
+      setSelectedOrderIdOrderId(orderId)
+      setIsModalOpen(true)
+    };
+    
+    const closeModal = () => {
+      setIsModalOpen(false)
+      setSelectedOrderIdOrderId(null)
+    }
+    
+    const changeStatus = (orderId: number, status: OrderStatus) => {
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.id === orderId ? { ...order, status } : order
+        )
+      );
     };
   
     return (
@@ -69,6 +87,9 @@ const AdminOrder: React.FC = () => {
             </li>
           );
         })}
+        {isModalOpen && selectedOrderId && (
+          <OrderModal orderId={selectedOrderId} onClose={closeModal} isAdmin={true} changeStatusOrder={changeStatus}/>
+        )}
       </ul>
     );
   };

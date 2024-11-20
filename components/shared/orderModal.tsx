@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Button } from '../ui';
 import Image from 'next/image';
 import { Package, ShoppingCart } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 interface OrderItem {
     id: number;
@@ -49,11 +50,13 @@ interface Order {
 interface OrderModalProps {
     orderId: number | null;
     onClose: () => void;
+    changeStatusOrder?: (orderId: number, status: string) => void
+    isAdmin?: boolean
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
-const OrderModal: React.FC<OrderModalProps> = ({ orderId, onClose }) => {
+const OrderModal: React.FC<OrderModalProps> = ({ orderId, onClose, isAdmin, changeStatusOrder }) => {
     const [order, setOrder] = useState<Order | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -81,12 +84,33 @@ const OrderModal: React.FC<OrderModalProps> = ({ orderId, onClose }) => {
         fetchOrder();
       }
     }, [orderId]);
+    
+    const changeStatus = async (orderId: number, status: string) => {
+      const data = {
+        "orderId": orderId,
+        "status": status
+      }
+      console.log(data)
+      try { 
+        const response = await axios.post(`${API_URL}/order/status`, data)
+        if (response.status === 200) {
+          toast.info('Статус заказа изменен')
+          if (changeStatusOrder) {
+            changeStatusOrder(orderId, status)
+          }
+          onClose()
+        }
+      } catch (err) {
+        console.log(err)
+        toast.error('Не удалось изменить статус заказа')
+      }
+    }
   
     if (!orderId) return null;
   
     return (
       <div className="z-50 fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
-        <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl w-full relative overflow-y-auto max-h-[99vh] scrollbar-hide">
+        <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl w-full relative overflow-y-auto max-h-[95vh] scrollbar-hide">
           <Button onClick={onClose} className="absolute top-2 right-2 text-gray-600 hover:text-gray-900" variant="link">
             <span className="text-xl font-semibold">×</span>
           </Button>
@@ -140,6 +164,16 @@ const OrderModal: React.FC<OrderModalProps> = ({ orderId, onClose }) => {
               </div>
             </>
           ) : null}
+          {isAdmin && 
+            (<div className='flex justify-end gap-[20px]'>
+              <Button variant='ghost' disabled={order?.status == 'delivered'} onClick={() => changeStatus(orderId, 'shipped')}>
+                В доставке
+              </Button>
+              <Button variant='link' disabled={order?.status == 'delivered'} onClick={() => changeStatus(orderId, 'delivered')}>
+                Доставлен
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     );

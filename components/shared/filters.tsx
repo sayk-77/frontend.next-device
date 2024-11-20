@@ -85,6 +85,7 @@ export const Filters: React.FC<Props> = ({ className, onFilterChange }) => {
     try {
       const response = await axios.post(`${API_URL}/product/${category}/query`, filters);
       onFilterChange(response.data);
+      console.log(response.data)
     } catch (error) {
       console.error('Ошибка при отправке фильтров:', error);
     }
