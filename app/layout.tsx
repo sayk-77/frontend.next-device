@@ -12,7 +12,10 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "Main",
+  title: "Next Device",
+  description: "Онлайн-магазин электроники",
+  manifest: "/manifest.json",
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
