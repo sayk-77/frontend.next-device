@@ -96,16 +96,18 @@ export default function PageBrand() {
                     alt={`${brandInfo.name} logo`}
                 />
             </div>
-            {
-                brandInfo.banners && brandInfo.banners.length > 0 && <AutoScrollCarousel carouselItems={brandInfo.banners}/>
-            }
+            <div className={"mx-1"}>
+                {
+                    brandInfo.banners && brandInfo.banners.length > 0 && <AutoScrollCarousel carouselItems={brandInfo.banners}/>
+                }
+            </div>
+
+            <Title className="pt-[50px] pl-4 pb-[30px] text-[14px] sm:text-[16px] md:text-[26px]" text="Категории"/>
             
-            <Title className="pt-[50px] pb-[30px] text-[32px]" text="Категории"/>
-            
-            <div className="flex text-center gap-[50px] pb-[50px]">
+            <div className="flex text-center flex-wrap gap-[50px] pb-[50px] justify-center">
                 {brandCategory.map((item) => (
                     <div key={item.category.id}>
-                        <CategoryCard 
+                        <CategoryCard
                             id={item.category.id}
                             name={item.category.name}
                             count={item.count.toString()}
@@ -116,7 +118,7 @@ export default function PageBrand() {
                     </div>
                 ))}
             </div>
-            
+
             <ProductsGroupList
                 title="Скидки"
                 products={discrountProduct}

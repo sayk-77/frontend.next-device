@@ -39,7 +39,7 @@ export default function BrandsPage() {
     
     return (
         <Container>
-            <div className="flex gap-[150px] flex-wrap">
+            <div className="flex gap-2 flex-wrap justify-around pt-4">
                 {
                     brands && brands.length > 0 && brands.map(brand => (
                         <Link href={`/brands/${brand.name}`} key={brand.id} onClick={() => handleBrandClick(brand.id, brand.name)}>

@@ -61,15 +61,17 @@ export default function Home() {
 
   return (
     <>
-      <Container className="flex justify-center">
-        <AutoScrollCarousel carouselItems={
-        [
-          { id: 1, title: `Новый IPhone 16 Pro - "Покорите мир с новым iPhone 16 Pro — стиль и мощь в каждом кадре!"`, imageUrl: `iphone-16pro.jpg` },
-          { id: 2, title: `Xiaomi 14 Ultra - новый флагман с шикарной камерой "С Xiaomi 14 Ultra каждый снимок — шедевр. Откройте для себя мир безграничных возможностей!"`, imageUrl: "xiaomi14-ultra.jpg" },
-          { id: 3, title: `Iqoo Z9 Turbo - "Iqoo Z9 Turbo — мощный производитель с революционной камерой для тех, кто ценит скорость и качество!"`, imageUrl: "iqoo-z9.jpg" },
-        ]} 
-        />
-      </Container>
+      <div className={"m-2"}>
+        <Container className="flex justify-center">
+          <AutoScrollCarousel carouselItems={
+            [
+              { id: 1, title: `Новый IPhone 16 Pro - "Покорите мир с новым iPhone 16 Pro — стиль и мощь в каждом кадре!"`, imageUrl: `iphone-16pro.jpg` },
+              { id: 2, title: `Xiaomi 14 Ultra - новый флагман с шикарной камерой "С Xiaomi 14 Ultra каждый снимок — шедевр. Откройте для себя мир безграничных возможностей!"`, imageUrl: "xiaomi14-ultra.jpg" },
+              { id: 3, title: `Iqoo Z9 Turbo - "Iqoo Z9 Turbo — мощный производитель с революционной камерой для тех, кто ценит скорость и качество!"`, imageUrl: "iqoo-z9.jpg" },
+            ]}
+          />
+        </Container>
+      </div>
 
       <Container className="pb-14 mt-10">
         <div className="flex flex-col gap-[40px]">

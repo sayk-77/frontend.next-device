@@ -43,7 +43,7 @@ export default function BrandCategoryPage({ params }: { params: { category: stri
     return (
         <Container>
             <Breadcrumbs className="pt-[10px]" />
-            <Title text={decodedCategory} className="text-[28px] pt-[20px]" />
+            <Title text={decodedCategory} className="text-[14px] sm:text-[16px] md:text-[26px] pl-4 pt-[20px]" />
             
             <div className="flex gap-[30px] flex-wrap pt-[40px] pb-[40px]">
                 {product && product.length > 0 ? (

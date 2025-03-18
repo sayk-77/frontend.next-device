@@ -219,17 +219,26 @@ export default function ProfilePage() {
 
     return (
         <div className="flex flex-col items-center">
-            <div className="bg-white p-8 mt-10 rounded-lg shadow-md w-full max-w-2xl">
+            <div className="bg-white p-6 sm:p-8 mt-6 sm:mt-10 rounded-lg shadow-md w-full max-w-screen-md">
                 <h2 className="text-2xl font-semibold text-center mb-6">Профиль</h2>
 
                 <div className="flex justify-around mb-6">
-                    <button onClick={() => handleSectionChange('info')} className={`px-4 py-2 ${selectedSection === 'info' ? 'text-orange-600 font-semibold border-b-2 border-orange-600' : 'text-gray-600'}`}>
+                    <button
+                        onClick={() => handleSectionChange('info')}
+                        className={`px-4 py-2 text-sm md:text-base ${selectedSection === 'info' ? 'text-orange-600 font-semibold border-b-2 border-orange-600' : 'text-gray-600'}`}
+                    >
                         Информация
                     </button>
-                    <button onClick={() => handleSectionChange('addresses')} className={`px-4 py-2 ${selectedSection === 'addresses' ? 'text-orange-600 font-semibold border-b-2 border-orange-600' : 'text-gray-600'}`}>
+                    <button
+                        onClick={() => handleSectionChange('addresses')}
+                        className={`px-4 py-2 text-sm md:text-base ${selectedSection === 'addresses' ? 'text-orange-600 font-semibold border-b-2 border-orange-600' : 'text-gray-600'}`}
+                    >
                         Мои адреса
                     </button>
-                    <button onClick={() => handleSectionChange('orders')} className={`px-4 py-2 ${selectedSection === 'orders' ? 'text-orange-600 font-semibold border-b-2 border-orange-600' : 'text-gray-600'}`}>
+                    <button
+                        onClick={() => handleSectionChange('orders')}
+                        className={`px-4 py-2 text-sm md:text-base ${selectedSection === 'orders' ? 'text-orange-600 font-semibold border-b-2 border-orange-600' : 'text-gray-600'}`}
+                    >
                         Мои заказы
                     </button>
                 </div>
@@ -242,10 +251,10 @@ export default function ProfilePage() {
                                 <p><span className="font-medium">Имя:</span> {userInfo.firstName}</p>
                                 <p><span className="font-medium">Фамилия:</span> {userInfo.lastName}</p>
                                 <p><span className="font-medium">Почта:</span> {userInfo.email}</p>
-                                <Button onClick={() => { setShowEditInfoModal(true); setEditableUserInfo(userInfo); }} variant="link">
+                                <Button onClick={() => { setShowEditInfoModal(true); setEditableUserInfo(userInfo); }} className={"pl-0"} variant="link">
                                     Изменить информацию
                                 </Button>
-                                <Button onClick={() => setShowChangePasswordModal(true)} variant="link" className="mt-2">
+                                <Button onClick={() => setShowChangePasswordModal(true)} variant="link" className="pl-0 mt-2">
                                     Изменить пароль
                                 </Button>
                             </div>

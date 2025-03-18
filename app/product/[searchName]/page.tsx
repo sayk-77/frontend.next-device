@@ -35,7 +35,7 @@ export default function ProductPage({ params: { searchName } }: { params: { sear
             } catch (err) {
                 console.log(err);
             } finally {
-                setLoading(false); 
+                setLoading(false);
             }
         };
         getProductById(searchName);
@@ -49,7 +49,7 @@ export default function ProductPage({ params: { searchName } }: { params: { sear
 
     if (loading) {
         return (
-            <div className="p-6">
+            <div className="p-4">
                 <Container>
                     <Skeleton />
                 </Container>
@@ -58,45 +58,56 @@ export default function ProductPage({ params: { searchName } }: { params: { sear
     }
 
     return (
-        <div className="p-6">
+        <div className="p-4 md:p-6">
             <Container>
                 <Breadcrumbs customBreadcrumbs={customBreadCrumbs} />
-                <div className="flex flex-col md:flex-row pt-[30px]">
-                    <div className="flex-1">
+
+                <div className="flex flex-col md:flex-row pt-6">
+                    <div className="flex-1 mb-4 md:mb-0">
                         <ProductCarousel carouselItems={product.images} />
                     </div>
 
-                    <div className="flex-1 pr-10 flex-col justify-between max-w-[800px]">
+                    <div className="flex-1 pr-0 md:pr-10 flex flex-col justify-between max-w-[800px] pl-8">
                         <div>
-                            <Title text={product.name} className="text-[32px] pb-[10px]" />
+                            <Title text={product.name} className="text-xl md:text-[32px] pb-[10px]" />
                         </div>
 
                         <ProductDetails details={product.details} />
 
                         <div className="flex flex-col pt-5">
                             <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-[5px]">Рейтинг: 5 <Star color="orange" size={16} /></div>
+                                <div className="flex items-center gap-[5px]">
+                                    Рейтинг: 5 <Star color="orange" size={16} />
+                                </div>
                                 <span className="text-green-600 font-semibold">В наличии: {product.stock} шт.</span>
                             </div>
 
-                            <div className="flex gap-[30px] items-center justify-between pt-[20px]">
+                            <div className="flex flex-col md:flex-row gap-[10px] md:gap-[30px] items-center justify-between pt-[20px]">
                                 <div className="flex flex-col relative">
-                                    {product.discountPrice > 0 && (<span className="text-end text-[18px] line-through absolute top-[-20px] right-0">{product.price}</span>)}
-                                    <span className="text-2xl">Цена: <strong>{product.price - product.discountPrice}</strong></span>
+                                    {product.discountPrice > 0 && (
+                                        <span className="text-end text-[14px] md:text-[18px] line-through absolute top-[-15px] right-0">
+                                            {product.price}
+                                        </span>
+                                    )}
+                                    <span className="text-lg md:text-2xl">Цена: <strong>{product.price - product.discountPrice}</strong></span>
                                 </div>
-                                <div className="flex items-center gap-5">
-                                    <Button className="rounded-[10px]"><ShoppingBasket size={24} /></Button>
-                                    <Button className="rounded-[10px]"><Heart size={24} /></Button>
-                                    <Button className="rounded-[10px]">Купить</Button>
+                                <div className="flex flex-row md:flex-row items-center gap-3">
+                                    <Button className="rounded-[10px] w-full md:w-auto">
+                                        <ShoppingBasket size={20} />
+                                    </Button>
+                                    <Button className="rounded-[10px] w-full md:w-auto">
+                                        <Heart size={20} />
+                                    </Button>
+                                    <Button className="rounded-[10px] w-full md:w-auto">Купить</Button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="pt-10 mx-auto">
-                    <h3 className="text-2xl font-semibold mb-4 text-gray-800">Описание:</h3>
-                    <p className="text-gray-700 leading-relaxed p-4 border border-gray-200 rounded-md shadow-sm">
+                <div className="pt-6 md:pt-10 mx-auto">
+                    <h3 className="text-lg md:text-2xl font-semibold mb-4 text-gray-800">Описание:</h3>
+                    <p className="text-sm md:text-base text-gray-700 leading-relaxed p-4 border border-gray-200 rounded-md shadow-sm">
                         {product.description}
                     </p>
                 </div>

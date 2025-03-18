@@ -88,7 +88,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({ onSubmit, onClose, produ
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-md w-full max-w-[800px] shadow-lg">
+            <div className="bg-white p-6 rounded-md w-full max-w-[800px] shadow-lg m-2">
                 <h3 className="text-xl font-semibold mb-4">Написать отзыв</h3>
                 <div className="flex flex-col gap-4">
                     <div>

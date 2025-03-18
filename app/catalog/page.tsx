@@ -71,12 +71,12 @@ export default function CatalogPage() {
       <div className="flex flex-col gap-[50px]">
         <div className="flex flex-col gap-5">
           <div className="flex items-center justify-between">
-            <Title text="Бренды" className="text-[26px]"/>
+            <Title text="Бренды" className="text-[14px] sm:text-[16px] md:text-[26px]"/>
             <Button variant="link">
-              <Link href="/brands" className="text-[14px] pr-[30px]">Показать все</Link>
+              <Link href="/brands" className="text-[14px] pr-[20px]">Показать все</Link>
             </Button>
           </div>
-          <div className="flex flex-wrap gap-5 justify-between">
+          <div className="flex flex-wrap gap-1 justify-around">
             {brands.map(item => (
               <Link href={`/brands/${item.name}`} key={item.id} onClick={() => handleBrandClick(item.id, item.name)}>
                 <Card

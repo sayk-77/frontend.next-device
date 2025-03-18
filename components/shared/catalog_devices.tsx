@@ -33,7 +33,7 @@ export const CatalogDevices = () => {
     }, [])
     
     return (
-        <div className="flex flex-wrap gap-5 justify-between">
+        <div className="flex flex-wrap gap-5 justify-around">
             {category.map(category => (
                 <Link
                     href={`/catalog/${category.category.title}`}

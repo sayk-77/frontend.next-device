@@ -26,7 +26,7 @@ export const AutoScrollCarousel: React.FC<AutoScrollCarouselProps> = ({ carousel
   }, [carouselItems.length]);
 
   return (
-      <div className="relative mx-[5px] mt-[30px] w-full max-w-[1000px] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[500px] overflow-hidden rounded-2xl">
+      <div className="relative mx-auto mt-[30px] w-full max-w-[1000px] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[500px] overflow-hidden rounded-2xl">
         {carouselItems.map((item, index) => (
             <div
                 key={item.id}

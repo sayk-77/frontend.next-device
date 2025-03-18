@@ -54,6 +54,12 @@ export const Header: React.FC<Props> = ({ className }) => {
                 <Container className="flex items-center justify-between py-4 lg:py-6">
                     <Logo />
 
+                    <Link href="/catalog" className={"hidden lg:flex"}>
+                        <Button variant="outline" className="ml-5">
+                            Каталог
+                        </Button>
+                    </Link>
+
                     <div className="flex-1 max-w-xs sm:max-w-md mx-4">
                         <SearchInput />
                     </div>
@@ -117,7 +123,7 @@ export const Header: React.FC<Props> = ({ className }) => {
                 }`}
                 onClick={closeMenu}
             >
-                <div className="w-2/4 bg-white h-full p-4" onClick={(e) => e.stopPropagation()}>
+                <div className="w-2/5 bg-white h-full p-4" onClick={(e) => e.stopPropagation()}>
                     <Button
                         variant="secondary"
                         onClick={closeMenu}

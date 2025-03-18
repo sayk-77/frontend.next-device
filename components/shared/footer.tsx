@@ -11,7 +11,7 @@ interface Props {
 
 export const Footer: React.FC<Props> = ({ className }) => {
   return (
-      <footer className={cn("border border-t mx-4", className)}>
+      <footer className={cn("border border-t px-4", className)}>
         <Container className='flex flex-col sm:flex-row items-center justify-between py-8'>
           <Link href='/'>
             <div className='flex items-center gap-4 mb-4 sm:mb-0'>

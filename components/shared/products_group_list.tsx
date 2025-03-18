@@ -33,7 +33,6 @@ export const ProductsGroupList: React.FC<Props> = ({ products, className, title,
     }
 
     const settings = {
-        dots: true,
         infinite: false,
         speed: 300,
         slidesToShow: 4,
@@ -63,9 +62,9 @@ export const ProductsGroupList: React.FC<Props> = ({ products, className, title,
 
     return (
         <div className={`w-full flex justify-center ${className}`}>
-            <div className="max-w-[1280px] w-full">
+            <div className="max-w-[1260px] w-full">
                 <div className="flex items-center justify-between px-4">
-                    <Title text={title} className="text-[26px] pb-[10px]" />
+                    <Title text={title} className="text-[14px] sm:text-[16px] md:text-[26px]" />
                     <div className="flex justify-center">
                         {!categoryUrl.includes('new') && !categoryUrl.includes('discount') && (
                             <Button variant="link">
@@ -75,8 +74,8 @@ export const ProductsGroupList: React.FC<Props> = ({ products, className, title,
                     </div>
                 </div>
 
-                <div className="flex justify-center">
-                    <div className="w-[90%] max-w-[1280px]">
+                <div className="flex justify-around">
+                    <div className="w-[85%] max-w-[1260px]">
                         <Slider {...settings} className="w-full">
                             {products.map((product) => (
                                 <div key={product.id} className="flex justify-center items-center">

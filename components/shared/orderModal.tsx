@@ -110,7 +110,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ orderId, onClose, isAdmin, chan
   
     return (
       <div className="z-50 fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
-        <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl w-full relative overflow-y-auto max-h-[95vh] scrollbar-hide">
+        <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl w-full relative overflow-y-auto max-h-[95vh] scrollbar-hide m-2">
           <Button onClick={onClose} className="absolute top-2 right-2 text-gray-600 hover:text-gray-900" variant="link">
             <span className="text-xl font-semibold">×</span>
           </Button>
