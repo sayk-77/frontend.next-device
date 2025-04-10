@@ -11,7 +11,7 @@ const Logo = () => {
                 src={"/logo.png"}
                 alt="logo"
                 width={isMobile ? 80 : 120}
-                height={isMobile ? 40 : 40}
+                height={isMobile ? 80 : 120}
                 className="object-contain"
             />
         </Link>

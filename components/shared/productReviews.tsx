@@ -79,7 +79,6 @@ const Review: React.FC<ReviewProps> = ({ productId }) => {
 
     return (
         <div className="pt-10 pb-10 px-5 rounded-lg shadow-lg">
-            {/* Блок с рейтингом и кнопкой */}
             <div className="mb-6">
                 <RatingDistribution reviews={reviews || []} />
                 <Button onClick={openModal} className="w-full md:w-auto mt-4">
@@ -87,10 +86,8 @@ const Review: React.FC<ReviewProps> = ({ productId }) => {
                 </Button>
             </div>
 
-            {/* Заголовок отзывов */}
             <h3 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800">Отзывы клиентов</h3>
 
-            {/* Список отзывов */}
             {loading ? (
                 <p className="text-gray-700">Загрузка...</p>
             ) : error ? (
@@ -144,7 +141,6 @@ const Review: React.FC<ReviewProps> = ({ productId }) => {
                 <p className="text-gray-700">Нет отзывов</p>
             )}
 
-            {/* Модальное окно увеличенного изображения */}
             {isImageModalOpen && selectedImage && (
                 <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-4 rounded-lg relative mx-4 my-4 max-w-[90%] max-h-[90%] overflow-y-auto">
@@ -163,7 +159,6 @@ const Review: React.FC<ReviewProps> = ({ productId }) => {
                 </div>
             )}
 
-            {/* Модальное окно формы отзыва */}
             {isModalOpen && !isImageModalOpen && (
                 <ReviewForm onSubmit={handleReviewSubmit} onClose={closeModal} productId={productId} />
             )}

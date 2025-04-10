@@ -67,7 +67,7 @@ export default function ProductPage({ params: { searchName } }: { params: { sear
                         <ProductCarousel carouselItems={product.images} />
                     </div>
 
-                    <div className="flex-1 pr-0 md:pr-10 flex flex-col justify-between max-w-[800px] pl-8">
+                    <div className="flex-1 pr-0 md:pr-10 flex flex-col justify-between max-w-[800px] md:ml-[20px]">
                         <div>
                             <Title text={product.name} className="text-xl md:text-[32px] pb-[10px]" />
                         </div>

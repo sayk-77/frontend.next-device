@@ -83,7 +83,6 @@ export const FavoriteItem: React.FC<Props> = ({ id }) => {
                 </div>
                 <div className="flex flex-col items-center justify-between text-center gap-1">
                     <h3 className="font-bold text-sm">{product.name}</h3>
-                    <p className='text-[10px] text-gray-400'>{product.description}</p>
                     <div className='relative flex flex-col'>
                         {product.price > product.discountPrice && (
                             <span className='text-gray-500 line-through text-xs'>{product.price} Р</span>
