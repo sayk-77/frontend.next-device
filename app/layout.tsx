@@ -4,6 +4,9 @@ import "./globals.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Header, Footer } from "@/components/shared";
+import { InitPushNot } from "@/components/initPushNot";
+
+
 
 const nunito = Nunito({
   subsets: ["cyrillic"],
@@ -43,6 +46,7 @@ export default function RootLayout({
           draggable
           theme="colored"
         />
+        <InitPushNot />
       </body>
     </html>
   );
