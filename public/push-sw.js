@@ -1,19 +1,13 @@
 // self.addEventListener("push", function (event) {
-//     console.log("[Service Worker] Push сообщение получено");
-//
 //     let data;
 //
 //     try {
-//         // Парсим payload
 //         if (event.data) {
 //             data = event.data.json();
-//             console.log("[Service Worker] Полученные данные:", data);
 //         } else {
-//             console.warn("[Service Worker] Нет данных в push-сообщении");
 //             data = {};
 //         }
 //     } catch (e) {
-//         console.error("[Service Worker] Не удалось распарсить JSON:", e);
 //         data = {};
 //     }
 //
@@ -25,12 +19,10 @@
 //         data: data.link || self.registration.scope,
 //     };
 //
-//     // ГЛАВНОЕ — оборачиваем showNotification в waitUntil
 //     event.waitUntil(
 //         (async () => {
 //             try {
 //                 await self.registration.showNotification(title, options);
-//                 console.log("[Service Worker] Уведомление показано");
 //             } catch (err) {
 //                 console.error("[Service Worker] Ошибка при показе уведомления:", err);
 //             }
@@ -39,7 +31,6 @@
 // });
 //
 // self.addEventListener("notificationclick", function (event) {
-//     console.log("[Service Worker] Клик по уведомлению");
 //     event.notification.close();
 //
 //     const urlToOpen = event.notification.data || self.registration.scope;

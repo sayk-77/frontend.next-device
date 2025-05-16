@@ -9,6 +9,7 @@ import axios from "axios";
 import { Star, ShoppingBasket, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 import dynamic from 'next/dynamic';
+import {LoadingSpinner} from "@/components/shared/loadinSpinner";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -50,9 +51,7 @@ export default function ProductPage({ params: { searchName } }: { params: { sear
     if (loading) {
         return (
             <div className="p-4">
-                <Container>
-                    <Skeleton />
-                </Container>
+                <LoadingSpinner fullPage={true} text={"Загрузка..."}/>
             </div>
         );
     }

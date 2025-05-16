@@ -5,6 +5,7 @@ import useBrandStore from "@/store/storeBrand";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { LoadingSpinner } from "@/components/shared/loadinSpinner";
 
 interface Category {
     id: number
@@ -41,54 +42,53 @@ interface Product {
     image: string
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function PageBrand() {
-    const [brandCategory, setBrandCategory] = useState<BrandCategory[]>([])
-    const [brandInfo, setBrandInfo] = useState<BrandInfo>({} as BrandInfo)
-    const [discrountProduct, setDiscountProduct] = useState<Product[]>([])
-    
-    const {brandId, brandName} = useBrandStore();
-    
+    const [brandCategory, setBrandCategory] = useState<BrandCategory[]>([]);
+    const [brandInfo, setBrandInfo] = useState<BrandInfo>({} as BrandInfo);
+    const [discrountProduct, setDiscountProduct] = useState<Product[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    const { brandId, brandName } = useBrandStore();
+
     useEffect(() => {
-        const getBrandCategory = async () => {
+        const fetchData = async () => {
             try {
-                const response = await axios.get(`${API_URL}/brands/${brandId}/category`)
-                setBrandCategory(response.data.categories)
-                console.log(response.data.categories)
+                const [categoryRes, infoRes, productRes] = await Promise.all([
+                    axios.get(`${API_URL}/brands/${brandId}/category`),
+                    axios.get(`${API_URL}/brands/${brandId}`),
+                    axios.get(`${API_URL}/catalog/discounts`, {
+                        params: { limit: 5, brand: brandName }
+                    })
+                ]);
+
+                setBrandCategory(categoryRes.data.categories);
+                setBrandInfo(infoRes.data);
+                setDiscountProduct(productRes.data);
             } catch (err) {
-                console.log(err)
+                console.log(err);
+            } finally {
+                setLoading(false);
             }
+        };
+
+        if (brandId && brandName) {
+            fetchData();
+        } else {
+            setLoading(false);
         }
-        const getBrandInfo = async () => {
-            try {
-                const response = await axios.get(`${API_URL}/brands/${brandId}`)
-                setBrandInfo(response.data)
-            } catch (err) {
-                console.log(err)
-            }
-        }
-        const getNewProduct = async () => {
-            try {
-                const response = await axios.get(`${API_URL}/catalog/discounts`, {
-                    params: {limit: 5, brand: brandName}
-                })
-                setDiscountProduct(response.data)
-            } catch (err) {
-                console.log(err)
-            }
-        }
-        
-        getBrandCategory()
-        getBrandInfo()
-        getNewProduct()
-    }, [brandId, brandName])
+    }, [brandId, brandName]);
+
+    if (loading) {
+        return <LoadingSpinner fullPage={true} text="Загрузка..." />;
+    }
 
     return (
         <Container>
-            <Breadcrumbs className="pt-[10px]"/>
+            <Breadcrumbs className="pt-[10px]" />
             <div className="flex flex-col items-center">
-                <Image 
+                <Image
                     src={`${API_URL}/images/brand/${brandInfo.imageUrl}`}
                     className="m-auto pt-[10px]"
                     width={300}
@@ -97,13 +97,13 @@ export default function PageBrand() {
                 />
             </div>
             <div className={"mx-1"}>
-                {
-                    brandInfo.banners && brandInfo.banners.length > 0 && <AutoScrollCarousel carouselItems={brandInfo.banners}/>
-                }
+                {brandInfo.banners && brandInfo.banners.length > 0 && (
+                    <AutoScrollCarousel carouselItems={brandInfo.banners} />
+                )}
             </div>
 
-            <Title className="pt-[50px] pl-4 pb-[30px] text-[14px] sm:text-[16px] md:text-[26px]" text="Категории"/>
-            
+            <Title className="pt-[50px] pl-4 pb-[30px] text-[14px] sm:text-[16px] md:text-[26px]" text="Категории" />
+
             <div className="flex text-center flex-wrap gap-[50px] pb-[50px] justify-center">
                 {brandCategory.map((item) => (
                     <div key={item.category.id}>
@@ -126,5 +126,5 @@ export default function PageBrand() {
                 className="pb-[30px]"
             />
         </Container>
-    )
+    );
 }

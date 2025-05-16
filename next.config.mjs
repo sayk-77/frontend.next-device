@@ -15,7 +15,7 @@ const nextConfig = {
             '127.0.0.1',
             '192.168.0.102',
             'localhost',
-            '4447c78071b0938a4a0890659dfd33ae.serveo.net',
+            '89138ce6da0a9719d3c33a68f5773c90.serveo.net',
         ],
     },
 };

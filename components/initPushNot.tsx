@@ -20,7 +20,6 @@ export const InitPushNot = () => {
         if (typeof window === "undefined") return
 
         if (!("serviceWorker" in navigator && "PushManager" in window)) {
-            console.warn("Push API не поддерживается")
             return
         }
 
@@ -31,11 +30,9 @@ export const InitPushNot = () => {
             })
 
             const serviceWorkerReady = await navigator.serviceWorker.ready
-            console.log("Кастомный SW зарегистрирован", serviceWorkerReady)
 
             const permission = await Notification.requestPermission()
             if (permission !== "granted") {
-                console.log("Разрешение не получено")
                 return
             }
 
@@ -44,7 +41,6 @@ export const InitPushNot = () => {
 
             const existingSubscription = await registration.pushManager.getSubscription()
             if (existingSubscription) {
-                console.log("Уже подписан:", existingSubscription)
                 return
             }
 
@@ -53,22 +49,19 @@ export const InitPushNot = () => {
                 applicationServerKey: convertedVapidKey,
             })
 
-            console.log("Подписка создана:", subscription)
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscribe`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem('token')}` },
                 body: JSON.stringify(subscription),
             })
 
             const data = await response.json()
-            console.log("Ответ сервера", data)
 
             if (!response.ok) {
                 throw new Error(`Server responded with ${response.status}`)
             }
 
-            console.log("Подписка отправлена на сервер")
         } catch (err) {
             console.error("Ошибка подписки:", err)
         }

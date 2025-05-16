@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import useBrandStore from "@/store/storeBrand";
 import { Button } from "@/components/ui";
+import {LoadingSpinner} from "@/components/shared/loadinSpinner";
 
 interface Brand {
   id: number;
@@ -18,7 +19,7 @@ interface Product {
   name: string;
   searchName: string;
   description: string;
-  discountPrice: number
+  discountPrice: number;
   image: string;
   price: number;
 }
@@ -41,21 +42,26 @@ export default function CatalogPage() {
   const [brands, setBrands] = useState<Brand[]>([]);
   const [productsDiscounts, setProductDiscounts] = useState<Product[]>([]);
   const [productNew, setProductNew] = useState<Product[]>([]);
-  
+  const [loading, setLoading] = useState<boolean>(true);
+
   const setBrandId = useBrandStore(state => state.setBrandId);
   const setBrandName = useBrandStore(state => state.setBrandName);
 
   useEffect(() => {
-
     const fetchData = async () => {
-      const fetchedBrands = await getItems('brands', 5);
-      const fetchedDiscounts = await getItems('catalog/discounts');
-      const fetchedNewProducts = await getItems('catalog/new');
+      try {
+        const fetchedBrands = await getItems('brands', 5);
+        const fetchedDiscounts = await getItems('catalog/discounts');
+        const fetchedNewProducts = await getItems('catalog/new');
 
-      setBrands(fetchedBrands);
-      setProductDiscounts(fetchedDiscounts);
-      setProductNew(fetchedNewProducts);
-      
+        setBrands(fetchedBrands);
+        setProductDiscounts(fetchedDiscounts);
+        setProductNew(fetchedNewProducts);
+      } catch (err) {
+        console.error('Ошибка при загрузке данных:', err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchData();
@@ -67,44 +73,48 @@ export default function CatalogPage() {
   };
 
   return (
-    <Container className="p-5 flex flex-col gap-5">
-      <div className="flex flex-col gap-[50px]">
-        <div className="flex flex-col gap-5">
-          <div className="flex items-center justify-between">
-            <Title text="Бренды" className="text-[14px] sm:text-[16px] md:text-[26px]"/>
-            <Button variant="link">
-              <Link href="/brands" className="text-[14px] pr-[20px]">Показать все</Link>
-            </Button>
-          </div>
-          <div className="flex flex-wrap gap-1 justify-around">
-            {brands.map(item => (
-              <Link href={`/brands/${item.name}`} key={item.id} onClick={() => handleBrandClick(item.id, item.name)}>
-                <Card
-                  imageUrl={`${API_URL}/images/brand/${item.imageUrl}`}
-                  name={item.name}
-                />
-              </Link>
-            ))}
-          </div>
-        </div>
+      <Container className="p-5 flex flex-col gap-5">
+        {loading ? (
+            <LoadingSpinner fullPage={true} text={"Загрузка..."}/>
+        ) : (
+            <div className="flex flex-col gap-[50px]">
+              <div className="flex flex-col gap-5">
+                <div className="flex items-center justify-between">
+                  <Title text="Бренды" className="text-[14px] sm:text-[16px] md:text-[26px]" />
+                  <Button variant="link">
+                    <Link href="/brands" className="text-[14px] pr-[20px]">Показать все</Link>
+                  </Button>
+                </div>
+                <div className="flex flex-wrap gap-1 justify-around">
+                  {brands.map(item => (
+                      <Link href={`/brands/${item.name}`} key={item.id} onClick={() => handleBrandClick(item.id, item.name)}>
+                        <Card
+                            imageUrl={`${API_URL}/images/brand/${item.imageUrl}`}
+                            name={item.name}
+                        />
+                      </Link>
+                  ))}
+                </div>
+              </div>
 
-        <div>
-          <Title text="Категории" className="text-[26px] pb-[20px]"/>
-          <CatalogDevices />
-        </div>
+              <div>
+                <Title text="Категории" className="text-[26px] pb-[20px]" />
+                <CatalogDevices />
+              </div>
 
-        <ProductsGroupList
-          title="Успей купить"
-          products={productsDiscounts}
-          categoryUrl="catalog/discounts"
-        />
+              <ProductsGroupList
+                  title="Успей купить"
+                  products={productsDiscounts}
+                  categoryUrl="catalog/discounts"
+              />
 
-        <ProductsGroupList
-          title="Новинки"
-          products={productNew}
-          categoryUrl="catalog/new"
-        />
-      </div>
-    </Container>
+              <ProductsGroupList
+                  title="Новинки"
+                  products={productNew}
+                  categoryUrl="catalog/new"
+              />
+            </div>
+        )}
+      </Container>
   );
 }

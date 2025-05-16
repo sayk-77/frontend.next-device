@@ -149,7 +149,7 @@ const AdminReview = () => {
               </Button>
             </div>
           </li>
-        )) : (<div>Не опубликованных отзывов пока нет</div>)}
+        )) : (<div>Отзывов, требующих модерации пока нет</div>)}
       </ul>
       
       {isImageModalOpen && selectedImage && (
