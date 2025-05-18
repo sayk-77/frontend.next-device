@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Device Offline</title>
+    <style>
+        :root {
+            --orange-primary: #ff7a00;
+            --orange-light: #ff9a3c;
+            --orange-dark: #e56c00;
+            --gray-light: #f5f5f5;
+            --gray-dark: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: var(--gray-light);
+            color: var(--gray-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 600px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .icon-container {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .offline-icon {
+            width: 150px;
+            height: 150px;
+            background-color: var(--orange-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 10px 25px rgba(255, 122, 0, 0.2);
+        }
+
+        .offline-icon svg {
+            width: 80px;
+            height: 80px;
+            fill: white;
+        }
+
+        .pulse {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: var(--orange-primary);
+            opacity: 0.5;
+            animation: pulse 2s infinite;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--orange-primary);
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            color: var(--gray-dark);
+        }
+
+        .btn {
+            background-color: var(--orange-primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(255, 122, 0, 0.3);
+        }
+
+        .btn:hover {
+            background-color: var(--orange-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .status {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: #ff0000;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translateX(-50%) scale(1);
+                opacity: 0.5;
+            }
+            70% {
+                transform: translateX(-50%) scale(1.1);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(-50%) scale(1);
+                opacity: 0;
+            }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .offline-icon {
+                width: 120px;
+                height: 120px;
+            }
+
+            .pulse {
+                width: 120px;
+                height: 120px;
+            }
+
+            .offline-icon svg {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .offline-icon {
+                width: 100px;
+                height: 100px;
+            }
+
+            .pulse {
+                width: 100px;
+                height: 100px;
+            }
+
+            .offline-icon svg {
+                width: 50px;
+                height: 50px;
+            }
+
+            .btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="icon-container">
+        <div class="pulse"></div>
+        <div class="offline-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+                <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+                <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+                <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+                <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                <line x1="12" y1="20" x2="12.01" y2="20"></line>
+            </svg>
+        </div>
+    </div>
+
+    <h1>Вы не в сети</h1>
+    <p>Некоторые фунции могут не работать. Проверьте ваше соединение с интернетом и повторите попытку.</p>
+
+    <button class="btn" onclick="window.history.back()">Вернутся назад</button>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        <span>Ожидание подключения к сети...</span>
+    </div>
+</div>
+
+<script>
+</script>
+</body>
+</html>

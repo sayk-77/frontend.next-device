@@ -4,6 +4,8 @@ import "./globals.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Header, Footer } from "@/components/shared";
+import registerServiceWorker from "@/components/regSW";
+import RegisterServiceWorker from "@/components/regSW";
 
 
 

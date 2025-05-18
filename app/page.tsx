@@ -3,6 +3,7 @@ import { Container, TopBar, ProductsGroupList, AutoScrollCarousel} from "@/compo
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {LoadingSpinner} from "@/components/shared/loadinSpinner";
+import RegisterServiceWorker from "@/components/regSW";
 
 interface BannerItem {
   id: number;
@@ -93,6 +94,7 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <RegisterServiceWorker />
         </Container>
       </>
   );

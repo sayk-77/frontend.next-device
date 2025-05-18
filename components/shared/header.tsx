@@ -13,6 +13,7 @@ import { Button } from '../ui';
 import CartDrawer from './cartDrawer';
 import { FavoritesDrawer } from './favoriteDrawer';
 import Logo from "@/components/shared/logo";
+import {OfflineNotification} from "@/components/shared/offline-not";
 
 interface Props {
     className?: string;
@@ -115,7 +116,9 @@ export const Header: React.FC<Props> = ({ className }) => {
                         </div>
                     </div>
                 </Container>
+                <OfflineNotification />
             </header>
+
 
             <div
                 className={`fixed inset-0 z-20 bg-black bg-opacity-50 flex justify-end transition-opacity duration-300 lg:hidden ${

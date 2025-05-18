@@ -24,12 +24,7 @@ export const InitPushNot = () => {
         }
 
         try {
-            const registration = await navigator.serviceWorker.register("/sw.js", {
-                scope: "/",
-                updateViaCache: "none",
-            })
-
-            const serviceWorkerReady = await navigator.serviceWorker.ready
+            const registration = await navigator.serviceWorker.ready
 
             const permission = await Notification.requestPermission()
             if (permission !== "granted") {
