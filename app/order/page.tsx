@@ -162,7 +162,7 @@ const OrderPage = () => {
               <p>Перед оплатой внимательно проверьте свои данные!</p>
               <div className='flex flex-col items-end'>
                 <p className="font-medium text-end text-[26px]">Итого: {totalPrice} Р</p>
-                <Button variant="outline" onClick={handleCheckout}>
+                <Button variant={!token ? 'destructive' : 'outline'} disabled={!token} onClick={handleCheckout}>
                   {selectedAddress ? (
                       <CheckoutButton orderItems={items} totalPrice={totalPrice} address={Number(selectedAddress)} />
                   ) : (

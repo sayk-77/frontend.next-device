@@ -1,12 +1,7 @@
-'use client';
 import { CatalogDevices, Container, ProductsGroupList, Title } from "@/components/shared";
-import { Card } from "@/components/shared";
-import axios from "axios";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import useBrandStore from "@/store/storeBrand";
 import { Button } from "@/components/ui";
-import {LoadingSpinner} from "@/components/shared/loadinSpinner";
+import BrandCardLink from "@/components/shared/BrandCardLink";
 
 interface Brand {
   id: number;
@@ -27,94 +22,58 @@ interface Product {
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const getItems = async (category: string, limit?: number) => {
-  try {
-    const response = await axios.get(`${API_URL}/${category}`, {
-      params: { limit }
-    });
-    return response.data;
-  } catch (err) {
-    console.error(err);
-    return [];
-  }
+  const res = await fetch(`${API_URL}/${category}${limit ? `?limit=${limit}` : ""}`, {
+    cache: "no-store"
+  });
+  if (!res.ok) return [];
+  return res.json();
 };
 
-export default function CatalogPage() {
-  const [brands, setBrands] = useState<Brand[]>([]);
-  const [productsDiscounts, setProductDiscounts] = useState<Product[]>([]);
-  const [productNew, setProductNew] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const setBrandId = useBrandStore(state => state.setBrandId);
-  const setBrandName = useBrandStore(state => state.setBrandName);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const fetchedBrands = await getItems('brands', 5);
-        const fetchedDiscounts = await getItems('catalog/discounts');
-        const fetchedNewProducts = await getItems('catalog/new');
-
-        setBrands(fetchedBrands);
-        setProductDiscounts(fetchedDiscounts);
-        setProductNew(fetchedNewProducts);
-      } catch (err) {
-        console.error('Ошибка при загрузке данных:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const handleBrandClick = (id: number, name: string) => {
-    setBrandId(id);
-    setBrandName(name);
-  };
+export default async function CatalogPage() {
+  const brands: Brand[] = await getItems("brands", 5);
+  const productsDiscounts: Product[] = await getItems("catalog/discounts");
+  const productNew: Product[] = await getItems("catalog/new");
 
   return (
       <Container className="p-5 flex flex-col gap-5">
-        {loading ? (
-            <LoadingSpinner fullPage={true} text={"Загрузка..."}/>
-        ) : (
-            <div className="flex flex-col gap-[50px]">
-              <div className="flex flex-col gap-5">
-                <div className="flex items-center justify-between">
-                  <Title text="Бренды" className="text-[14px] sm:text-[16px] md:text-[26px]" />
-                  <Button variant="link">
-                    <Link href="/brands" className="text-[14px] pr-[20px]">Показать все</Link>
-                  </Button>
-                </div>
-                <div className="flex flex-wrap gap-1 justify-around">
-                  {brands.map(item => (
-                      <Link href={`/brands/${item.name}`} key={item.id} onClick={() => handleBrandClick(item.id, item.name)}>
-                        <Card
-                            imageUrl={`${API_URL}/images/brand/${item.imageUrl}`}
-                            name={item.name}
-                        />
-                      </Link>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <Title text="Категории" className="text-[26px] pb-[20px]" />
-                <CatalogDevices />
-              </div>
-
-              <ProductsGroupList
-                  title="Успей купить"
-                  products={productsDiscounts}
-                  categoryUrl="catalog/discounts"
-              />
-
-              <ProductsGroupList
-                  title="Новинки"
-                  products={productNew}
-                  categoryUrl="catalog/new"
-              />
+        <div className="flex flex-col gap-[50px]">
+          <div className="flex flex-col gap-5">
+            <div className="flex items-center justify-between">
+              <Title text="Бренды" className="text-[14px] sm:text-[16px] md:text-[26px]" />
+              <Button variant="link">
+                <Link href="/brands" className="text-[14px] pr-[20px]">Показать все</Link>
+              </Button>
             </div>
-        )}
+
+            <div className="flex flex-wrap gap-1 justify-around">
+              {brands.map(item => (
+                  <BrandCardLink
+                      key={item.id}
+                      id={item.id}
+                      name={item.name}
+                      imageUrl={`${API_URL}/images/brand/${item.imageUrl}`}
+                  />
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <Title text="Категории" className="text-[26px] pb-[20px]" />
+            <CatalogDevices />
+          </div>
+
+          <ProductsGroupList
+              title="Успей купить"
+              products={productsDiscounts}
+              categoryUrl="catalog/discounts"
+          />
+
+          <ProductsGroupList
+              title="Новинки"
+              products={productNew}
+              categoryUrl="catalog/new"
+          />
+        </div>
       </Container>
   );
 }

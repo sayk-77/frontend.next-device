@@ -1,15 +1,5 @@
-'use client';
-import { Container, TopBar, ProductsGroupList, AutoScrollCarousel} from "@/components/shared";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import {LoadingSpinner} from "@/components/shared/loadinSpinner";
+import { Container, TopBar, ProductsGroupList, AutoScrollCarousel } from "@/components/shared";
 import RegisterServiceWorker from "@/components/regSW";
-
-interface BannerItem {
-  id: number;
-  title: string;
-  imageUrl: string;
-}
 
 interface Product {
   id: number;
@@ -23,53 +13,41 @@ interface Product {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const fetchProducts = async (categoryUrl: string): Promise<Product[]> => {
+const productGroups = [
+  { title: "Успей купить", categoryUrl: "discounts" },
+  { title: "Новинки", categoryUrl: "new" },
+  { title: "Мобильные телефоны", categoryUrl: "mobile" },
+  { title: "Ноутбуки", categoryUrl: "laptop" }
+];
+
+async function fetchProducts(categoryUrl: string): Promise<Product[]> {
   try {
-    const response = await axios.get(`${API_URL}/catalog/${categoryUrl}`, { params: { limit: 6 } });
-    return response.data;
-  } catch (err) {
-    console.error(err);
+    const res = await fetch(`${API_URL}/catalog/${categoryUrl}?limit=6`);
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
     return [];
   }
-};
+}
 
-export default function Home() {
-  const [productGroups, setProductGroups] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      const groups = [
-        { title: "Успей купить", categoryUrl: "discounts" },
-        { title: "Новинки", categoryUrl: "new" },
-        { title: "Мобильные телефоны", categoryUrl: "mobile" },
-        { title: "Ноутбуки", categoryUrl: "laptop" }
-      ];
-
-      const fetchedProducts = await Promise.all(
-          groups.map(async (group) => {
-            const products = await fetchProducts(group.categoryUrl);
-            return { ...group, products };
-          })
-      );
-
-      setProductGroups(fetchedProducts);
-      setLoading(false);
-    };
-
-    loadProducts();
-  }, []);
+export default async function Home() {
+  const fetchedGroups = await Promise.all(
+      productGroups.map(async (group) => {
+        const products = await fetchProducts(group.categoryUrl);
+        return { ...group, products };
+      })
+  );
 
   return (
       <>
         <div className="m-2">
           <Container className="flex justify-center">
-            <AutoScrollCarousel carouselItems={
-              [
-                { id: 1, title: `Новый IPhone 16 Pro - "Покорите мир с новым iPhone 16 Pro — стиль и мощь в каждом кадре!"`, imageUrl: `iphone-16pro.jpg` },
-                { id: 2, title: `Xiaomi 14 Ultra - новый флагман с шикарной камерой "С Xiaomi 14 Ultra каждый снимок — шедевр. Откройте для себя мир безграничных возможностей!"`, imageUrl: "xiaomi14-ultra.jpg" },
-                { id: 3, title: `Iqoo Z9 Turbo - "Iqoo Z9 Turbo — мощный производитель с революционной камерой для тех, кто ценит скорость и качество!"`, imageUrl: "iqoo-z9.jpg" },
-              ]}
+            <AutoScrollCarousel
+                carouselItems={[
+                  { id: 1, title: `Новый IPhone 16 Pro - "Покорите мир с новым iPhone 16 Pro — стиль и мощь в каждом кадре!"`, imageUrl: `iphone-16pro.jpg` },
+                  { id: 2, title: `Xiaomi 14 Ultra - новый флагман с шикарной камерой "С Xiaomi 14 Ultra каждый снимок — шедевр. Откройте для себя мир безграничных возможностей!"`, imageUrl: "xiaomi14-ultra.jpg" },
+                  { id: 3, title: `Iqoo Z9 Turbo - "Iqoo Z9 Turbo — мощный производитель с революционной камерой для тех, кто ценит скорость и качество!"`, imageUrl: "iqoo-z9.jpg" },
+                ]}
             />
           </Container>
         </div>
@@ -78,19 +56,15 @@ export default function Home() {
           <div className="flex flex-col gap-[40px]">
             <div className="flex-1">
               <div className="flex flex-col gap-[30px]">
-                {loading ? (
-                    <LoadingSpinner text={"Загрузка..."}/>
-                ) : (
-                    productGroups.map((group) => (
-                        <ProductsGroupList
-                            key={group.title}
-                            title={group.title}
-                            loading={loading}
-                            products={group.products}
-                            categoryUrl={`/catalog/${group.categoryUrl}`}
-                        />
-                    ))
-                )}
+                {fetchedGroups.map((group) => (
+                    <ProductsGroupList
+                        key={group.title}
+                        title={group.title}
+                        loading={false}
+                        products={group.products}
+                        categoryUrl={`/catalog/${group.categoryUrl}`}
+                    />
+                ))}
               </div>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type {Metadata, Viewport} from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -19,8 +19,11 @@ export const metadata: Metadata = {
   title: "Next Device",
   description: "Онлайн-магазин электроники",
   manifest: "/manifest.json",
-  themeColor: "#000000",
 };
+
+export const viewport: Viewport = {
+  themeColor: "#000000"
+}
 
 export default function RootLayout({
   children,
@@ -31,6 +34,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/preview_logo.png" />
+        <title>Next Device</title>
       </head>
       <body className={nunito.className}>
         <div className="flex flex-col min-h-screen">

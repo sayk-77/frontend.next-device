@@ -1,130 +1,75 @@
-'use client'
-import { AutoScrollCarousel, CategoryCard, Container, ProductsGroupList, Title } from "@/components/shared";
-import Breadcrumbs from "@/components/shared/breadCrumb";
-import useBrandStore from "@/store/storeBrand";
-import axios from "axios";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { LoadingSpinner } from "@/components/shared/loadinSpinner";
+import ClientBrandPage from "@/components/shared/ClientBrandPage";
 
-interface Category {
-    id: number
-    name: string
-    title: string
-}
 
 interface BrandCategory {
-    category: Category
-    count: number
-    images_category: string
+    category: {
+        id: number;
+        name: string;
+        title: string;
+    };
+    count: number;
+    images_category: string;
 }
 
 interface BrandBanner {
-    id: number
-    title: string
-    imageUrl: string
+    id: number;
+    title: string;
+    imageUrl: string;
 }
 
 interface BrandInfo {
-    id: number
-    name: string
-    imageUrl: string
-    banners: BrandBanner[]
+    id: number;
+    name: string;
+    imageUrl: string;
+    banners: BrandBanner[];
 }
 
 interface Product {
-    id: number
-    name: string
-    searchName: string
-    description: string
-    discountPrice: number
-    price: number
-    image: string
+    id: number;
+    name: string;
+    searchName: string;
+    description: string;
+    discountPrice: number;
+    price: number;
+    image: string;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export default function PageBrand() {
-    const [brandCategory, setBrandCategory] = useState<BrandCategory[]>([]);
-    const [brandInfo, setBrandInfo] = useState<BrandInfo>({} as BrandInfo);
-    const [discrountProduct, setDiscountProduct] = useState<Product[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+interface PageBrandProps {
+    params: {
+        name: string;
+    };
+}
 
-    const { brandId, brandName } = useBrandStore();
+export default async function PageBrand({ params }: PageBrandProps) {
+    const { name } = params;
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [categoryRes, infoRes, productRes] = await Promise.all([
-                    axios.get(`${API_URL}/brands/${brandId}/category`),
-                    axios.get(`${API_URL}/brands/${brandId}`),
-                    axios.get(`${API_URL}/catalog/discounts`, {
-                        params: { limit: 5, brand: brandName }
-                    })
-                ]);
+    const brandRes = await fetch(`${API_URL}/brands/${name}`);
+    if (!brandRes.ok) throw new Error("Не удалось получить бренд");
+    const brandInfo: BrandInfo = await brandRes.json();
 
-                setBrandCategory(categoryRes.data.categories);
-                setBrandInfo(infoRes.data);
-                setDiscountProduct(productRes.data);
-            } catch (err) {
-                console.log(err);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const brandId = brandInfo.id;
 
-        if (brandId && brandName) {
-            fetchData();
-        } else {
-            setLoading(false);
-        }
-    }, [brandId, brandName]);
+    const [categoryRes, productRes] = await Promise.all([
+        fetch(`${API_URL}/brands/${brandId}/category`),
+        fetch(`${API_URL}/catalog/discounts?limit=5&brand=${name}`),
+    ]);
 
-    if (loading) {
-        return <LoadingSpinner fullPage={true} text="Загрузка..." />;
-    }
+    if (!categoryRes.ok || !productRes.ok) throw new Error("Ошибка загрузки данных");
+
+    const categoryData = await categoryRes.json();
+    const discountProducts: Product[] = await productRes.json();
+
+    const brandCategories: BrandCategory[] = categoryData.categories;
 
     return (
-        <Container>
-            <Breadcrumbs className="pt-[10px]" />
-            <div className="flex flex-col items-center">
-                <Image
-                    src={`${API_URL}/images/brand/${brandInfo.imageUrl}`}
-                    className="m-auto pt-[10px]"
-                    width={300}
-                    height={300}
-                    alt={`${brandInfo.name} logo`}
-                />
-            </div>
-            <div className={"mx-1"}>
-                {brandInfo.banners && brandInfo.banners.length > 0 && (
-                    <AutoScrollCarousel carouselItems={brandInfo.banners} />
-                )}
-            </div>
-
-            <Title className="pt-[50px] pl-4 pb-[30px] text-[14px] sm:text-[16px] md:text-[26px]" text="Категории" />
-
-            <div className="flex text-center flex-wrap gap-[50px] pb-[50px] justify-center">
-                {brandCategory.map((item) => (
-                    <div key={item.category.id}>
-                        <CategoryCard
-                            id={item.category.id}
-                            name={item.category.name}
-                            count={item.count.toString()}
-                            title={item.category.title}
-                            link={`/brands/${brandName}/category/${item.category.title}`}
-                            imageUrl={`${API_URL}/images/product/${item.images_category}`}
-                        />
-                    </div>
-                ))}
-            </div>
-
-            <ProductsGroupList
-                title="Скидки"
-                products={discrountProduct}
-                categoryUrl="/brands/new"
-                className="pb-[30px]"
-            />
-        </Container>
+        <ClientBrandPage
+            brandInfo={brandInfo}
+            brandCategories={brandCategories}
+            discountProducts={discountProducts}
+            brandName={name}
+            brandId={brandId}
+        />
     );
 }

@@ -1,46 +1,29 @@
-'use client';
-
-import { Container, ProductCarousel, Title } from "@/components/shared";
-import Breadcrumbs from "@/components/shared/breadCrumb";
-import ProductDetails from "@/components/shared/productDetails";
-import { Button, Skeleton } from "@/components/ui";
-import useBrandStore from "@/store/storeBrand";
-import axios from "axios";
-import { Star, ShoppingBasket, Heart } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Container, ProductCarousel, Title } from '@/components/shared';
+import Breadcrumbs from '@/components/shared/breadCrumb';
 import dynamic from 'next/dynamic';
-import {LoadingSpinner} from "@/components/shared/loadinSpinner";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import React from 'react';
+import {ClientProductInfo} from "@/components/shared/ClientProductInfo";
 
 const Review = dynamic(() => import('@/components/shared/productReviews'), { ssr: false });
 
-export default function ProductPage({ params: { searchName } }: { params: { searchName: string } }) {
-    const [product, setProduct] = useState<Product>({} as Product);
-    const setBrandId = useBrandStore(state => state.setBrandId);
-    const setBrandName = useBrandStore(state => state.setBrandName);
-    const [loading, setLoading] = useState(true);
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-    const handleBrandClick = (id: number, name: string) => {
-        setBrandId(id);
-        setBrandName(name);
+interface ProductPageProps {
+    params: {
+        searchName: string;
     };
+}
 
-    useEffect(() => {
-        const getProductById = async (searchName: string) => {
-            try {
-                const response = await axios.get(`${API_URL}/products/${searchName}`);
-                setProduct(response.data);
-                handleBrandClick(response.data.brand.id, response.data.brand.name);
-                console.log(response.data);
-            } catch (err) {
-                console.log(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        getProductById(searchName);
-    }, [searchName]);
+export default async function ProductPage({ params: { searchName } }: ProductPageProps) {
+    let product;
+
+    try {
+        const res = await fetch(`${API_URL}/products/${searchName}`);
+        if (!res.ok) throw new Error('Failed to fetch product');
+        product = await res.json();
+    } catch (error) {
+        return <div className="p-4">Ошибка загрузки товара</div>;
+    }
 
     const customBreadCrumbs = [
         { label: product.brand?.name, href: `/brands/${product.brand?.name}` },
@@ -48,60 +31,18 @@ export default function ProductPage({ params: { searchName } }: { params: { sear
         { label: product.name, href: `/product/${product.searchName}` },
     ];
 
-    if (loading) {
-        return (
-            <div className="p-4">
-                <LoadingSpinner fullPage={true} text={"Загрузка..."}/>
-            </div>
-        );
-    }
 
     return (
         <div className="p-4 md:p-6">
             <Container>
                 <Breadcrumbs customBreadcrumbs={customBreadCrumbs} />
 
-                <div className="flex flex-col md:flex-row pt-6">
+                <div className="flex flex-col lg:flex-row pt-6">
                     <div className="flex-1 mb-4 md:mb-0">
                         <ProductCarousel carouselItems={product.images} />
                     </div>
 
-                    <div className="flex-1 pr-0 md:pr-10 flex flex-col justify-between max-w-[800px] pl-8">
-                        <div>
-                            <Title text={product.name} className="text-xl md:text-[32px] pb-[10px]" />
-                        </div>
-
-                        <ProductDetails details={product.details} />
-
-                        <div className="flex flex-col pt-5">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-[5px]">
-                                    Рейтинг: 5 <Star color="orange" size={16} />
-                                </div>
-                                <span className="text-green-600 font-semibold">В наличии: {product.stock} шт.</span>
-                            </div>
-
-                            <div className="flex flex-col md:flex-row gap-[10px] md:gap-[30px] items-center justify-between pt-[20px]">
-                                <div className="flex flex-col relative">
-                                    {product.discountPrice > 0 && (
-                                        <span className="text-end text-[14px] md:text-[18px] line-through absolute top-[-15px] right-0">
-                                            {product.price}
-                                        </span>
-                                    )}
-                                    <span className="text-lg md:text-2xl">Цена: <strong>{product.price - product.discountPrice}</strong></span>
-                                </div>
-                                <div className="flex flex-row md:flex-row items-center gap-3">
-                                    <Button className="rounded-[10px] w-full md:w-auto">
-                                        <ShoppingBasket size={20} />
-                                    </Button>
-                                    <Button className="rounded-[10px] w-full md:w-auto">
-                                        <Heart size={20} />
-                                    </Button>
-                                    <Button className="rounded-[10px] w-full md:w-auto">Купить</Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <ClientProductInfo product={product} />
                 </div>
 
                 <div className="pt-6 md:pt-10 mx-auto">

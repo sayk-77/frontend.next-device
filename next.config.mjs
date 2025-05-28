@@ -1,13 +1,31 @@
 import nextPWA from 'next-pwa';
 
-const withPWA = nextPWA({
+const isDev = process.env.NODE_ENV === 'development';
+
+const pwaConfig = {
     dest: 'public',
     register: false,
     skipWaiting: true,
     disableDevLogs: false,
+    cleanupOutdatedCaches: true,
     buildExcludes: [/app-build-manifest\.json$/],
 
     runtimeCaching: [
+        {
+            urlPattern: /\/success.*/i,
+            handler: 'NetworkOnly',
+            options: {
+                cacheName: 'success-route',
+                networkTimeoutSeconds: 5,
+                plugins: [
+                    {
+                        handlerDidError: async () => {
+                            return Response.error();
+                        },
+                    },
+                ],
+            },
+        },
         {
             urlPattern: /^https:\/\/.*\/api\/.*$/,
             handler: 'NetworkFirst',
@@ -80,9 +98,8 @@ const withPWA = nextPWA({
     fallbacks: {
         document: '/offline.html',
     },
-});
+};
 
-/** @type {import('next').NextConfig} */
 const nextConfig = {
     eslint: {
         ignoreDuringBuilds: true,
@@ -95,10 +112,14 @@ const nextConfig = {
             '127.0.0.1',
             '192.168.0.102',
             'localhost',
-            '73674768b0dcd8368f05e220ba5cd7b9.serveo.net',
+            '7f0b6a46c1fc8256cf0c734882cee2b9.serveo.net',
         ],
         unoptimized: true,
     }
 };
 
-export default withPWA(nextConfig);
+const finalConfig = isDev
+    ? nextConfig
+    : nextPWA(pwaConfig)(nextConfig);
+
+export default finalConfig;

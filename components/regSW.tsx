@@ -10,6 +10,11 @@ export default function RegisterServiceWorker() {
     const setup = async () => {
         if (typeof window === 'undefined') return
 
+        if (process.env.NODE_ENV === 'development') {
+            console.info('SW не регистрируется в dev');
+            return;
+        }
+
         if (!('serviceWorker' in navigator && 'PushManager' in window)) {
             console.warn('Браузер не поддерживает Push API')
             return

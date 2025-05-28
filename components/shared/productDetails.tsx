@@ -29,19 +29,20 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ details }) => {
   ];
 
   return (
-      <div className="space-y-2 mt-6">
-        {specs.map(({ label, value }, index) => (
-            <div key={index} className="space-y-2">
-              <p className="text-black font-bold text-base md:text-[20px]">{label}</p>
-              <div>
+      <div className="mt-8 w-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm md:p-8">
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">Характеристики</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+          {specs.map(({ label, value }, index) => (
+              <div key={index} className="flex flex-col">
+                <span className="text-sm font-medium text-gray-500">{label}</span>
                 {value ? (
-                    <p className="text-gray-600 text-[18px] md:text-[20px]">{value}</p>
+                    <span className="text-base font-semibold text-gray-800">{value}</span>
                 ) : (
-                    <Skeleton className="w-full h-6 mx-auto" />
+                    <Skeleton className="w-full h-5 mt-1" />
                 )}
               </div>
-            </div>
-        ))}
+          ))}
+        </div>
       </div>
   );
 };

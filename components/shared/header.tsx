@@ -40,7 +40,10 @@ export const Header: React.FC<Props> = ({ className }) => {
     const totalItems = items.reduce((total, item) => total + item.quantity, 0);
     const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0);
 
-    const handleCartToggle = () => setIsCartOpen((prev) => !prev);
+    const handleCartToggle = () => {
+        setIsCartOpen((prev) => !prev);
+        closeMenu();
+    }
     const handleFavoritesToggle = () => setIsFavoritesOpen((prev) => !prev);
     const handleLogout = () => {
         localStorage.removeItem('token');
