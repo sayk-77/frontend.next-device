@@ -3,8 +3,7 @@ import Breadcrumbs from '@/components/shared/breadCrumb';
 import dynamic from 'next/dynamic';
 import React from 'react';
 import {ClientProductInfo} from "@/components/shared/ClientProductInfo";
-
-const Review = dynamic(() => import('@/components/shared/productReviews'), { ssr: false });
+import Review from "@/components/shared/productReviews";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

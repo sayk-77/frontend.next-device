@@ -46,7 +46,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                     <div className="mt-4 flex justify-between">
                         <h3 className="font-bold text-[26px]">Итого: {totalPrice} Р</h3>
                         <Link href="/order">
-                            <Button onClick={onClose}>Оформит заказ</Button>
+                            <Button onClick={onClose} className="text-gray-700" variant="outline">Оформить заказ</Button>
                         </Link>
                     </div>
                 )}

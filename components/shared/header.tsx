@@ -59,7 +59,7 @@ export const Header: React.FC<Props> = ({ className }) => {
                     <Logo />
 
                     <Link href="/catalog" className={"hidden lg:flex"}>
-                        <Button variant="outline" className="ml-5">
+                        <Button variant="outline" className="ml-5 ">
                             Каталог
                         </Button>
                     </Link>

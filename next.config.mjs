@@ -12,21 +12,6 @@ const pwaConfig = {
 
     runtimeCaching: [
         {
-            urlPattern: /\/success.*/i,
-            handler: 'NetworkOnly',
-            options: {
-                cacheName: 'success-route',
-                networkTimeoutSeconds: 5,
-                plugins: [
-                    {
-                        handlerDidError: async () => {
-                            return Response.error();
-                        },
-                    },
-                ],
-            },
-        },
-        {
             urlPattern: /^https:\/\/.*\/api\/.*$/,
             handler: 'NetworkFirst',
             options: {
