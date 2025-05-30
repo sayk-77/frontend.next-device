@@ -2,18 +2,17 @@ import { Container, ProductCarousel, Title } from '@/components/shared';
 import Breadcrumbs from '@/components/shared/breadCrumb';
 import dynamic from 'next/dynamic';
 import React from 'react';
-import {ClientProductInfo} from "@/components/shared/ClientProductInfo";
+import { ClientProductInfo } from "@/components/shared/ClientProductInfo";
 import Review from "@/components/shared/productReviews";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface ProductPageProps {
-    params: {
-        searchName: string;
-    };
+    params: Promise<{ searchName: string }>;
 }
 
-export default async function ProductPage({ params: { searchName } }: ProductPageProps) {
+export default async function ProductPage({ params }: ProductPageProps) {
+    const { searchName } = await params;
     let product;
 
     try {
@@ -21,7 +20,11 @@ export default async function ProductPage({ params: { searchName } }: ProductPag
         if (!res.ok) throw new Error('Failed to fetch product');
         product = await res.json();
     } catch (error) {
-        return <div className="p-4">Ошибка загрузки товара</div>;
+        return (
+            <div className="p-4 text-red-500">
+                Ошибка загрузки товара
+            </div>
+        );
     }
 
     const customBreadCrumbs = [
@@ -29,7 +32,6 @@ export default async function ProductPage({ params: { searchName } }: ProductPag
         { label: product.category?.title || 'Категория', href: `/brands/${product.brand?.name}/category/${product.category?.title}` },
         { label: product.name, href: `/product/${product.searchName}` },
     ];
-
 
     return (
         <div className="p-4 md:p-6">
