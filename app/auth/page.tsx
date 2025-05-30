@@ -43,7 +43,7 @@ export default function AuthPage() {
     };
 
     return (
-        <div className="flex justify-center pt-[100px]">
+        <div className="flex justify-center pt-[100px] m-2">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
                 <h2 className="text-2xl font-semibold text-center mb-6">
                     {isRegister ? 'Регистрация' : 'Вход'}

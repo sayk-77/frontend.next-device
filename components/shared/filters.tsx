@@ -8,6 +8,7 @@ import axios from 'axios';
 interface Props {
   className?: string;
   onFilterChange: (filteredProducts: Product[]) => void;
+  closeFilter: () => void;
 }
 
 interface Product {
@@ -33,7 +34,7 @@ interface ScreenSizeProps {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const Filters: React.FC<Props> = ({ className, onFilterChange }) => {
+export const Filters: React.FC<Props> = ({ className, onFilterChange, closeFilter }) => {
   const [prices, setPrice] = useState<PriceProps>({ priceFrom: 0, priceTo: 1000000 });
   const [screenSize, setScreenSize] = useState<ScreenSizeProps>({ screenFrom: 0, screenTo: 15 });
   const [brands, setBrands] = useState<Set<string>>(new Set());
@@ -97,7 +98,8 @@ export const Filters: React.FC<Props> = ({ className, onFilterChange }) => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
-  });
+    });
+    closeFilter()
   };
   
   const resetFilters = () => {
@@ -111,7 +113,7 @@ export const Filters: React.FC<Props> = ({ className, onFilterChange }) => {
   };
 
   return (
-    <div className={cn('', className)}>
+    <div className={cn('pl-3', className)}>
       <Title text='Фильтрация' size='sm' className='mb-5 font-bold' />
 
       <form onSubmit={handleSubmit}>

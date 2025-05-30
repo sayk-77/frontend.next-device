@@ -1,12 +1,6 @@
-'use client'
-
-import { Container, Filters, ProductCard, Title } from "@/components/shared";
-import { LaptopFilters } from "@/components/shared/laptopFilters";
-import { ProductCardSkeleton } from "@/components/shared/skeletonCard";
-import { Skeleton } from "@/components/ui";
+import { Container, ProductCard, Title } from "@/components/shared";
 import axios from "axios";
-import { time } from "console";
-import { useEffect, useState } from "react";
+import CatalogClient from "@/components/shared/CatalogClient";
 
 interface Product {
     id: number;
@@ -14,62 +8,34 @@ interface Product {
     searchName: string;
     description: string;
     categoryTitle: string;
-    discountPrice: number
+    discountPrice: number;
     image: string;
     price: number;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
-const skeletonCardCount = new Array(15).fill(0)
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+async function getProductsByCategory(category: string): Promise<Product[]> {
+    try {
+        const response = await axios.get(`${API_URL}/catalog/${category}`);
+        return response.data;
+    } catch (err) {
+        console.error(err);
+        return [];
+    }
+}
 
-export default function CatalogCategoryPage({ params }: { params: { category: string } }) {
-    const [products, setProducts] = useState<Product[]>([]);
-    const [categoryTitle, setCategoryTitle] = useState<string>("");
-  
-    useEffect(() => {
-      const getProductByCategory = async () => {
-        try {
-          const response = await axios.get(`${API_URL}/catalog/${params.category}`);
-          setProducts(response.data);
-          setCategoryTitle(response.data[0].categoryTitle);
-          console.log(response.data);
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      getProductByCategory();
-    }, [params]);
-  
-    const handleFilterChange = (filteredProducts: Product[]) => {
-      setProducts(filteredProducts);
-    };
-  
+export default async function CatalogCategoryPage({ params }: { params: { category: string } }) {
+    const products = await getProductsByCategory(params.category);
+    const categoryTitle = products.length > 0 ? products[0].categoryTitle : "";
+
     return (
-      <Container>
-        <Title text={categoryTitle} className="text-[28px] pt-[10px]" />
-        <div className="flex pt-[40px] pb-[40px] gap-[80px]">
-          {params.category == 'laptop' ? <LaptopFilters onFilterChange={handleFilterChange}/> : <Filters onFilterChange={handleFilterChange} />}
-          <div className="flex gap-[20px] flex-wrap">
-            {products && products.length > 0 ? products.map((product) => (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                imageUrl={product.image}
-                description={product.description}
-                discountPrice={product.discountPrice}
-                price={product.price}
-                searchName={product.searchName}
-              />
-            )) : (
-              skeletonCardCount.map((_, index) => (
-                <ProductCardSkeleton key={index} />
-              ))
-            )}
-          </div>
-        </div>
-      </Container>
+        <Container>
+            <div className={"flex items-center gap-3 pt-[20px] pl-2 justify-between"}>
+                <Title text={categoryTitle} className="text-[28px]" />
+            </div>
+
+            <CatalogClient category={params.category} initialProducts={products} />
+        </Container>
     );
-  }
-  
+}

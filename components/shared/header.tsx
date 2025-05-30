@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Heart, ShoppingCart, User, LogOut } from 'lucide-react';
+import { ShoppingCart, User, LogOut, Heart, Menu, X } from 'lucide-react';
 import { useFavoritesStore } from '@/store/favoriteStore';
 import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
@@ -12,6 +12,8 @@ import { Container, SearchInput } from './index';
 import { Button } from '../ui';
 import CartDrawer from './cartDrawer';
 import { FavoritesDrawer } from './favoriteDrawer';
+import Logo from "@/components/shared/logo";
+import {OfflineNotification} from "@/components/shared/offline-not";
 
 interface Props {
     className?: string;
@@ -24,6 +26,7 @@ export const Header: React.FC<Props> = ({ className }) => {
 
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
         initializeFavorites();
@@ -39,41 +42,42 @@ export const Header: React.FC<Props> = ({ className }) => {
 
     const handleCartToggle = () => {
         setIsCartOpen((prev) => !prev);
-    };
-
-    const handleFavoritesToggle = () => {
-        setIsFavoritesOpen((prev) => !prev);
-    };
-
+        closeMenu();
+    }
+    const handleFavoritesToggle = () => setIsFavoritesOpen((prev) => !prev);
     const handleLogout = () => {
         localStorage.removeItem('token');
         logout();
     };
+    const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+    const closeMenu = () => setIsMenuOpen(false);
 
     return (
         <>
-            <header className={cn("bg-white border-b sticky top-0 z-10", className)}>
-                <Container className="flex items-center justify-between py-8">
-                    <Link href="/">
-                        <div className="flex items-center gap-4">
-                            <Image src="/logo.png" alt="logo" width={130} height={55} />
-                        </div>
-                    </Link>
+            <header className={cn("bg-white shadow-md sticky top-0 z-10", className)}>
+                <Container className="flex items-center justify-between py-4 lg:py-6">
+                    <Logo />
 
-                    <Link href="/catalog">
-                        <Button variant="outline" className="ml-5">
+                    <Link href="/catalog" className={"hidden lg:flex"}>
+                        <Button variant="outline" className="ml-5 ">
                             Каталог
                         </Button>
                     </Link>
 
-                    <div className="mx-10 flex-1">
+                    <div className="flex-1 max-w-xs sm:max-w-md mx-4">
                         <SearchInput />
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="lg:hidden">
+                        <Button onClick={toggleMenu} variant="secondary" className={"mr-4"}>
+                            {isMenuOpen ? <X size={16} className="z-10" /> : <Menu size={16} />}
+                        </Button>
+                    </div>
+
+                    <div className="hidden lg:flex items-center gap-3 lg:gap-6">
                         {isAuthenticated ? (
-                            <>
-                                <Link href='/profile'>
+                            <div className="flex items-center gap-2">
+                                <Link href="/profile">
                                     <Button variant="outline" className="flex items-center gap-1">
                                         <User size={16} />
                                         Профиль
@@ -83,9 +87,9 @@ export const Header: React.FC<Props> = ({ className }) => {
                                     <LogOut size={16} />
                                     Выйти
                                 </Button>
-                            </>
+                            </div>
                         ) : (
-                            <Link href='/auth'>
+                            <Link href="/auth">
                                 <Button variant="outline" className="flex items-center gap-1">
                                     <User size={16} />
                                     Войти
@@ -93,31 +97,73 @@ export const Header: React.FC<Props> = ({ className }) => {
                             </Link>
                         )}
 
-                        <Button variant="outline" onClick={handleFavoritesToggle}>
-                            <div className="relative">
-                                <Heart size={24} />
-                                {favorites.length > 0 && (
-                                    <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full px-1">
-                                        {favorites.length}
-                                    </span>
-                                )}
-                            </div>
+                        <Button variant="outline" onClick={handleFavoritesToggle} className="relative">
+                            <Heart size={24} />
+                            {favorites.length > 0 && (
+                                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full px-1">
+                  {favorites.length}
+                </span>
+                            )}
                         </Button>
 
-                        <div>
-                            <Button className="group relative" onClick={handleCartToggle}>
+                        <div className={"mr-2"}>
+                            <Button variant="outline" onClick={handleCartToggle} className="relative flex items-center gap-2">
+                                <ShoppingCart size={20} />
+                                {totalItems > 0 && (
+                                    <span className="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full px-1">
+                    {totalItems}
+                  </span>
+                                )}
                                 <b>{totalPrice} Р</b>
-                                <span className="h-full w-[1px] bg-white/30 mx-3" />
-                                <div className="flex items-center gap-1 transition duration-300 group-hover:opacity-0">
-                                    <ShoppingCart className="h-4 w-4 relative" strokeWidth={2} />
-                                    <b>{totalItems}</b>
-                                </div>
-                                <ArrowRight className="w-5 absolute right-5 transition duration-300 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0" />
                             </Button>
                         </div>
                     </div>
                 </Container>
+                <OfflineNotification />
             </header>
+
+
+            <div
+                className={`fixed inset-0 z-20 bg-black bg-opacity-50 flex justify-end transition-opacity duration-300 lg:hidden ${
+                    isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+                }`}
+                onClick={closeMenu}
+            >
+                <div className="w-2/5 bg-white h-full p-4" onClick={(e) => e.stopPropagation()}>
+                    <Button
+                        variant="secondary"
+                        onClick={closeMenu}
+                        className="absolute top-4 right-4 z-30"
+                    >
+                        <X size={16} />
+                    </Button>
+                    <div className="flex flex-col gap-4 mt-[50px]">
+                        <Link href="/catalog">
+                            <Button variant="link" className="w-full" onClick={closeMenu}>Каталог</Button>
+                        </Link>
+                        {isAuthenticated ? (
+                            <>
+                                <Link href="/profile">
+                                    <Button variant="link" className="w-full" onClick={closeMenu}>Профиль</Button>
+                                </Link>
+                                <Button variant="link" onClick={() => { handleLogout(); closeMenu(); }} className="w-full">
+                                    Выйти
+                                </Button>
+                            </>
+                        ) : (
+                            <Link href="/auth">
+                                <Button variant="link" className="w-full" onClick={closeMenu}>Войти</Button>
+                            </Link>
+                        )}
+                        <Button variant="link" onClick={handleFavoritesToggle} className="w-full">
+                            Избранное
+                        </Button>
+                        <Button variant="link" onClick={handleCartToggle} className="w-full">
+                            Корзина
+                        </Button>
+                    </div>
+                </div>
+            </div>
 
             <div
                 className={`fixed inset-0 z-20 bg-black bg-opacity-50 flex justify-end transition-opacity duration-300 ${

@@ -5,13 +5,14 @@ import { Container, ProductCard, Title } from "@/components/shared";
 import useBrandStore from "@/store/storeBrand";
 import axios from "axios";
 import Breadcrumbs from "@/components/shared/breadCrumb";
+import { LoadingSpinner } from "@/components/shared/loadinSpinner";
 
 interface Products {
     id: number;
     name: string;
     description: string;
     searchName: string;
-    discountPrice: number
+    discountPrice: number;
     image: string;
     price: number;
 }
@@ -22,8 +23,9 @@ export default function BrandCategoryPage({ params }: { params: { category: stri
     const { category } = params;
     const { brandId, brandName } = useBrandStore();
     const decodedCategory = decodeURIComponent(category);
-    
+
     const [product, setProduct] = useState<Products[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const getProduct = async () => {
@@ -34,17 +36,27 @@ export default function BrandCategoryPage({ params }: { params: { category: stri
                 setProduct(response.data);
             } catch (err) {
                 console.log(err);
+            } finally {
+                setLoading(false);
             }
         };
 
-        getProduct();
+        if (brandId && decodedCategory) {
+            getProduct();
+        } else {
+            setLoading(false);
+        }
     }, [decodedCategory, brandId, category, brandName]);
+
+    if (loading) {
+        return <LoadingSpinner fullPage={true} text="Загрузка..." />;
+    }
 
     return (
         <Container>
             <Breadcrumbs className="pt-[10px]" />
-            <Title text={decodedCategory} className="text-[28px] pt-[20px]" />
-            
+            <Title text={decodedCategory} className="text-[14px] sm:text-[16px] md:text-[26px] pl-4 pt-[20px]" />
+
             <div className="flex gap-[30px] flex-wrap pt-[40px] pb-[40px]">
                 {product && product.length > 0 ? (
                     product.map((prod) => (
