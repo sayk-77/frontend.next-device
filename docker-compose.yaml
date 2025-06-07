@@ -1,0 +1,16 @@
+version: '3.8'
+
+networks:
+  nextdevice-network:
+    external: true
+
+services:
+  frontend:
+    build: .
+    container_name: nextdevice-frontend
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.local
+    networks:
+      - nextdevice-network
