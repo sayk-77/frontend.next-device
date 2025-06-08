@@ -11,6 +11,12 @@ interface Product {
   price: number;
 }
 
+export const metadata = {
+    title: 'NextDevice — магазин электроники',
+    description: 'NextDevice — удобный онлайн-магазин телефонов, планшетов, ноутбуков, аксессуаров и умных часов.',
+    robots: 'index, follow',
+};
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const productGroups = [
