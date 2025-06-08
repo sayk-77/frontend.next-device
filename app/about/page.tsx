@@ -1,6 +1,13 @@
 import { Container } from '@/components/shared';
 import { NextPage } from 'next';
 import Image from 'next/image';
+
+export const metadata = {
+    title: 'О NextDevice — магазин электроники',
+    description: 'Узнайте больше о NextDevice — магазине электроники с большим выбором техники и выгодными ценами.',
+    robots: 'index, follow',
+};
+
 const AboutUs: NextPage = () => {
   return (
     <Container className="p-8 mt-[20px] mb-[20px] bg-white rounded-lg shadow-lg">

@@ -19,6 +19,12 @@ interface Product {
   price: number;
 }
 
+export const metadata = {
+  title: 'Каталог NextDevice — телефоны, планшеты, аксессуары',
+  description: 'Огромный каталог электроники NextDevice — телефоны, планшеты, ноутбуки и аксессуары по лучшим ценам.',
+  robots: 'index, follow',
+};
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const getItems = async (category: string, limit?: number) => {

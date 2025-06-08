@@ -1,4 +1,11 @@
 import { NextPage } from 'next';
+
+export const metadata = {
+    title: 'Политика конфиденциальности — NextDevice',
+    description: 'Политика конфиденциальности магазина NextDevice — как мы защищаем ваши данные.',
+    robots: 'index, follow',
+};
+
 const PrivacyPolicy: NextPage = () => {
   return (
     <div className="p-8 max-w-2xl mx-auto bg-white rounded-lg shadow-lg">
