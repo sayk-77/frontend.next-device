@@ -37,7 +37,7 @@ export default function CatalogClient({ category, initialProducts }: Props) {
     };
 
     return (
-        <div className="flex pt-[40px] pb-[40px] gap-[80px]">
+        <div className="flex flex-col md:flex-row pt-[40px] pb-[40px] gap-[80px]">
             <div className="hidden md:block">
                 {category === 'laptop' ? (
                     <LaptopFilters onFilterChange={handleFilterChange} />
@@ -74,7 +74,7 @@ export default function CatalogClient({ category, initialProducts }: Props) {
             </div>
 
             <div className="flex gap-[20px] flex-wrap">
-                {products.length > 0 ? (
+                {products?.length > 0 ? (
                     products.map((product) => (
                         <ProductCard
                             key={product.id}
@@ -88,9 +88,7 @@ export default function CatalogClient({ category, initialProducts }: Props) {
                         />
                     ))
                 ) : (
-                    skeletonCardCount.map((_, index) => (
-                        <ProductCardSkeleton key={index} />
-                    ))
+                    <div className="text-[20px]">Ничего не найдено</div>
                 )}
             </div>
         </div>
